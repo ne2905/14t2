@@ -1,25 +1,43 @@
 #include <iostream>
-#include<math.h>
+#include <vector>
+#include <algorithm>
+
 using namespace std;
- 
- int ucln_dequy ( int p, int q) {
- 	if (q == 0) return p;
- 	return ucln_dequy (q, p % q);
- }
- 
- int ucln_lap (int p, int q){
- 	while (q !=0) {
- 		int r = p % q;
- 		p = q;
- 		q = r;
-	 }
-	 return p;
- }
- int main(){
- 	int a, b;
- 	cout<<"Nhap hai so: ";
- 	cin >> a >> b;
- 	cout <<"Uoc so chung lon nhat (de quy): "<< ucln_dequy(a, b)<< endl;
- 	cout <<"Uoc chung lon nhat (lap): " << ucln_lap(a, b) << endl;
- 	return 0;
- }
+
+int timSoPhanTu(vector<int> &a, int s) {
+    sort(a.rbegin(), a.rend());
+
+    int p = 0, count = 0;
+    for (int i = 0; i < a.size(); i++) {
+        p += a[i];
+        count++;
+        if (p > s) {
+            return count;
+        }
+    }
+    return -1;
+}
+
+int main() {
+    int n, s;
+    cout << "Nhập số phần tử của dãy: ";
+    cin >> n;
+    
+    vector<int> a(n);
+    cout << "Nhập các phần tử của dãy: ";
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+
+    cout << "Nhập giá trị s: ";
+    cin >> s;
+
+    int result = timSoPhanTu(a, s);
+    if (result != -1) {
+        cout << "Số phần tử ít nhất cần lấy để tổng lớn hơn " << s << " là: " << result << endl;
+    } else {
+        cout << "Không thể đạt tổng lớn hơn " << s << "." << endl;
+    }
+
+    return 0;
+}
