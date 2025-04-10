@@ -1,31 +1,42 @@
 #include <iostream>
 using namespace std;
 
-void doiTien(int m) {
-    int menhGia[] = {10000, 5000, 2000, 1000, 500};
-    int soTo[5] = {0};
-
-    for (int i = 0; i < 5; i++) {
-        soTo[i] = m / menhGia[i];
-        m %= menhGia[i];
+// Hàm in mảng
+void printArray1(int x[], int n) {
+    for (int i = 0; i < n; i++) {
+        cout << x[i] << " ";
     }
+    cout << endl;
+}
 
-    if (m > 0) {
-        cout << "Không thể đổi đủ số tiền." << endl;
-    } else {
-        cout << "Số tờ tiền cần dùng:" << endl;
-        for (int i = 0; i < 5; i++) {
-            if (soTo[i] > 0) {
-                cout << menhGia[i] << "đ: " << soTo[i] << " tờ" << endl;
+// Hàm Selection Sort (sắp xếp giảm dần)
+void selectionSort1(int x[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int m = i; // Vị trí phần tử lớn nhất
+        for (int j = i + 1; j < n; j++) {
+            if (x[j] > x[m]) { // Sắp xếp giảm dần
+                m = j;
             }
         }
+        // Hoán đổi
+        int tg = x[m];
+        x[m] = x[i];
+        x[i] = tg;
     }
 }
 
 int main() {
-    int m;
-    cout << "Nhập số tiền cần đổi: ";
-    cin >> m;
-    doiTien(m);
+    cout << "Bai 1: Sap xep noi bot voi Selection Sort\n";
+    int x[] = {34, 74, 94, 84, 54, 24};
+    int n = sizeof(x) / sizeof(x[0]);
+    
+    cout << "Day so ban dau: ";
+    printArray1(x, n);
+    
+    selectionSort1(x, n);
+    
+    cout << "Day so sau khi sap xep giam dan: ";
+    printArray1(x, n);
+    
     return 0;
 }
