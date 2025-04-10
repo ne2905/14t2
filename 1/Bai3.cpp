@@ -1,8 +1,17 @@
 #include <iostream>
 using namespace std;
 
+// Hàm nhập mảng từ bàn phím
+void nhapMang(int x[], int n) {
+    cout << "Nhap " << n << " phan tu cua mang:\n";
+    for (int i = 0; i < n; i++) {
+        cout << "x[" << i << "] = ";
+        cin >> x[i];
+    }
+}
+
 // Hàm in mảng
-void printArray3(int x[], int n) {
+void printArray(int x[], int n) {
     for (int i = 0; i < n; i++) {
         cout << x[i] << " ";
     }
@@ -10,7 +19,7 @@ void printArray3(int x[], int n) {
 }
 
 // Hàm Insertion Sort (sắp xếp giảm dần)
-void insertionSort3(int x[], int n) {
+void insertionSort(int x[], int n) {
     for (int i = 1; i < n; i++) {
         int tam = x[i], j = i - 1;
         while (j >= 0 && x[j] < tam) { // Sắp xếp giảm dần
@@ -22,17 +31,30 @@ void insertionSort3(int x[], int n) {
 }
 
 int main() {
+    int n;
     cout << "Bai 3: Sap xep chen voi Insertion Sort\n";
-    int x[] = {34, 14, 24, 54, 84, 64, 94, 74, 4}; // 04 được nhập là 4
-    int n = sizeof(x) / sizeof(x[0]);
-    
+    cout << "Nhap so luong phan tu cua mang: ";
+    cin >> n;
+
+    // Khởi tạo mảng động
+    int* x = new int[n];
+
+    // Nhập mảng từ bàn phím
+    nhapMang(x, n);
+
+    // Hiển thị mảng ban đầu
     cout << "Day so ban dau: ";
-    printArray3(x, n);
-    
-    insertionSort3(x, n);
-    
+    printArray(x, n);
+
+    // Sắp xếp mảng bằng Insertion Sort
+    insertionSort(x, n);
+
+    // Hiển thị mảng sau khi sắp xếp
     cout << "Day so sau khi sap xep giam dan: ";
-    printArray3(x, n);
-    
+    printArray(x, n);
+
+    // Giải phóng bộ nhớ
+    delete[] x;
+
     return 0;
 }
