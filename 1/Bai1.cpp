@@ -1,8 +1,17 @@
 #include <iostream>
 using namespace std;
 
+// Hàm nhập mảng từ bàn phím
+void nhapMang(int x[], int n) {
+    cout << "Nhap " << n << " phan tu cua mang:\n";
+    for (int i = 0; i < n; i++) {
+        cout << "x[" << i << "] = ";
+        cin >> x[i];
+    }
+}
+
 // Hàm in mảng
-void printArray1(int x[], int n) {
+void printArray(int x[], int n) {
     for (int i = 0; i < n; i++) {
         cout << x[i] << " ";
     }
@@ -10,7 +19,7 @@ void printArray1(int x[], int n) {
 }
 
 // Hàm Selection Sort (sắp xếp giảm dần)
-void selectionSort1(int x[], int n) {
+void selectionSort(int x[], int n) {
     for (int i = 0; i < n - 1; i++) {
         int m = i; // Vị trí phần tử lớn nhất
         for (int j = i + 1; j < n; j++) {
@@ -26,17 +35,30 @@ void selectionSort1(int x[], int n) {
 }
 
 int main() {
+    int n;
     cout << "Bai 1: Sap xep noi bot voi Selection Sort\n";
-    int x[] = {34, 74, 94, 84, 54, 24};
-    int n = sizeof(x) / sizeof(x[0]);
-    
+    cout << "Nhap so luong phan tu cua mang: ";
+    cin >> n;
+
+    // Khởi tạo mảng động
+    int* x = new int[n];
+
+    // Nhập mảng từ bàn phím
+    nhapMang(x, n);
+
+    // Hiển thị mảng ban đầu
     cout << "Day so ban dau: ";
-    printArray1(x, n);
-    
-    selectionSort1(x, n);
-    
+    printArray(x, n);
+
+    // Sắp xếp mảng bằng Selection Sort
+    selectionSort(x, n);
+
+    // Hiển thị mảng sau khi sắp xếp
     cout << "Day so sau khi sap xep giam dan: ";
-    printArray1(x, n);
-    
+    printArray(x, n);
+
+    // Giải phóng bộ nhớ
+    delete[] x;
+
     return 0;
 }
