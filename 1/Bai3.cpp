@@ -1,43 +1,38 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
-
 using namespace std;
 
-int timSoPhanTu(vector<int> &a, int s) {
-    sort(a.rbegin(), a.rend());
-
-    int p = 0, count = 0;
-    for (int i = 0; i < a.size(); i++) {
-        p += a[i];
-        count++;
-        if (p > s) {
-            return count;
-        }
+// Hàm in mảng
+void printArray3(int x[], int n) {
+    for (int i = 0; i < n; i++) {
+        cout << x[i] << " ";
     }
-    return -1;
+    cout << endl;
+}
+
+// Hàm Insertion Sort (sắp xếp giảm dần)
+void insertionSort3(int x[], int n) {
+    for (int i = 1; i < n; i++) {
+        int tam = x[i], j = i - 1;
+        while (j >= 0 && x[j] < tam) { // Sắp xếp giảm dần
+            x[j + 1] = x[j];
+            j--;
+        }
+        x[j + 1] = tam;
+    }
 }
 
 int main() {
-    int n, s;
-    cout << "Nhập số phần tử của dãy: ";
-    cin >> n;
+    cout << "Bai 3: Sap xep chen voi Insertion Sort\n";
+    int x[] = {34, 14, 24, 54, 84, 64, 94, 74, 4}; // 04 được nhập là 4
+    int n = sizeof(x) / sizeof(x[0]);
     
-    vector<int> a(n);
-    cout << "Nhập các phần tử của dãy: ";
-    for (int i = 0; i < n; i++) {
-        cin >> a[i];
-    }
-
-    cout << "Nhập giá trị s: ";
-    cin >> s;
-
-    int result = timSoPhanTu(a, s);
-    if (result != -1) {
-        cout << "Số phần tử ít nhất cần lấy để tổng lớn hơn " << s << " là: " << result << endl;
-    } else {
-        cout << "Không thể đạt tổng lớn hơn " << s << "." << endl;
-    }
-
+    cout << "Day so ban dau: ";
+    printArray3(x, n);
+    
+    insertionSort3(x, n);
+    
+    cout << "Day so sau khi sap xep giam dan: ";
+    printArray3(x, n);
+    
     return 0;
 }
