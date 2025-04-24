@@ -1,13 +1,11 @@
-#include <stdio.h>
+#include <iostream>
+using namespace std;
 
 int search(int x[], int n, int k) {
     int i = 0;
     while (i < n && x[i] != k)
         i++;
-    if (i < n)
-        return i;
-    else
-        return -1;
+    return (i < n) ? i : -1;
 }
 
 void bai1() {
@@ -18,14 +16,10 @@ void bai1() {
     int pos1 = search(x, n, k1);
     int pos2 = search(x, n, k2);
 
-    printf("Bai 1:\n");
-    if (pos1 != -1)
-        printf("Tim thay %d tai vi tri %d\n", k1, pos1);
-    else
-        printf("Khong tim thay %d\n", k1);
+    cout << "Bai 1:\n";
+    (pos1 != -1) ? cout << "Tim thay " << k1 << " tai vi tri " << pos1 << endl
+                 : cout << "Khong tim thay " << k1 << endl;
 
-    if (pos2 != -1)
-        printf("Tim thay %d tai vi tri %d\n", k2, pos2);
-    else
-        printf("Khong tim thay %d\n", k2);
+    (pos2 != -1) ? cout << "Tim thay " << k2 << " tai vi tri " << pos2 << endl
+                 : cout << "Khong tim thay " << k2 << endl;
 }
