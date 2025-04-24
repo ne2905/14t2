@@ -1,60 +1,54 @@
-#include <iostream>
-using namespace std;
+#include <string.h>
 
-// Hàm nhập mảng từ bàn phím
-void nhapMang(int x[], int n) {
-    cout << "Nhap " << n << " phan tu cua mang:\n";
+struct HocSinh {
+    char hoTen[50];
+    char gioiTinh[10];
+    int namSinh;
+    float diemTongKet;
+};
+
+int timTheoTenVaDiem(struct HocSinh ds[], int n, char ten[], float diem) {
     for (int i = 0; i < n; i++) {
-        cout << "x[" << i << "] = ";
-        cin >> x[i];
+        if (strcmp(ds[i].hoTen, ten) == 0 && ds[i].diemTongKet == diem)
+            return i;
     }
+    return -1;
 }
 
-// Hàm in mảng
-void printArray(int x[], int n) {
-    for (int i = 0; i < n; i++) {
-        cout << x[i] << " ";
-    }
-    cout << endl;
+int timTheoDiem(struct HocSinh ds[], int left, int right, float diem) {
+    if (left > right)
+        return -1;
+    int mid = (left + right) / 2;
+    if (ds[mid].diemTongKet == diem)
+        return mid;
+    else if (ds[mid].diemTongKet < diem) // danh sách giảm dần
+        return timTheoDiem(ds, left, mid - 1, diem);
+    else
+        return timTheoDiem(ds, mid + 1, right, diem);
 }
 
-// Hàm Insertion Sort (sắp xếp giảm dần)
-void insertionSort(int x[], int n) {
-    for (int i = 1; i < n; i++) {
-        int tam = x[i], j = i - 1;
-        while (j >= 0 && x[j] < tam) { // Sắp xếp giảm dần
-            x[j + 1] = x[j];
-            j--;
-        }
-        x[j + 1] = tam;
-    }
-}
+void bai3() {
+    struct HocSinh ds[5] = {
+        {"Nguyen Van A", "Nam", 2005, 9.5},
+        {"Tran Thi B", "Nu", 2006, 8.8},
+        {"Le Van C", "Nam", 2004, 8.0},
+        {"Pham Thi D", "Nu", 2005, 7.5},
+        {"Do Van E", "Nam", 2006, 7.0}
+    };
+    int n = 5;
 
-int main() {
-    int n;
-    cout << "Bai 3: Sap xep chen voi Insertion Sort\n";
-    cout << "Nhap so luong phan tu cua mang: ";
-    cin >> n;
+    printf("\nBai 3:\n");
 
-    // Khởi tạo mảng động
-    int* x = new int[n];
+    int pos1 = timTheoTenVaDiem(ds, n, "Tran Thi B", 8.8);
+    if (pos1 != -1)
+        printf("Tim thay hoc sinh theo ten va diem tai vi tri %d: %s\n", pos1, ds[pos1].hoTen);
+    else
+        printf("Khong tim thay hoc sinh theo ten va diem\n");
 
-    // Nhập mảng từ bàn phím
-    nhapMang(x, n);
-
-    // Hiển thị mảng ban đầu
-    cout << "Day so ban dau: ";
-    printArray(x, n);
-
-    // Sắp xếp mảng bằng Insertion Sort
-    insertionSort(x, n);
-
-    // Hiển thị mảng sau khi sắp xếp
-    cout << "Day so sau khi sap xep giam dan: ";
-    printArray(x, n);
-
-    // Giải phóng bộ nhớ
-    delete[] x;
-
-    return 0;
+    float diemCanTim = 8.0;
+    int pos2 = timTheoDiem(ds, 0, n - 1, diemCanTim);
+    if (pos2 != -1)
+        printf("Tim thay hoc sinh theo diem tai vi tri %d: %s\n", pos2, ds[pos2].hoTen);
+    else
+        printf("Khong tim thay hoc sinh theo diem %.2f\n", diemCanTim);
 }
