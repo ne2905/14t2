@@ -1,64 +1,31 @@
-#include <iostream>
-using namespace std;
+#include <stdio.h>
 
-// Hàm nhập mảng từ bàn phím
-void nhapMang(int x[], int n) {
-    cout << "Nhap " << n << " phan tu cua mang:\n";
-    for (int i = 0; i < n; i++) {
-        cout << "x[" << i << "] = ";
-        cin >> x[i];
-    }
+int search(int x[], int n, int k) {
+    int i = 0;
+    while (i < n && x[i] != k)
+        i++;
+    if (i < n)
+        return i;
+    else
+        return -1;
 }
 
-// Hàm in mảng
-void printArray(int x[], int n) {
-    for (int i = 0; i < n; i++) {
-        cout << x[i] << " ";
-    }
-    cout << endl;
-}
+void bai1() {
+    int x[] = {34, 14, 24, 54, 84, 64, 94, 74, 4};
+    int n = sizeof(x) / sizeof(x[0]);
 
-// Hàm Selection Sort (sắp xếp giảm dần)
-void selectionSort(int x[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        int m = i; // Vị trí phần tử lớn nhất
-        for (int j = i + 1; j < n; j++) {
-            if (x[j] > x[m]) { // Sắp xếp giảm dần
-                m = j;
-            }
-        }
-        // Hoán đổi
-        int tg = x[m];
-        x[m] = x[i];
-        x[i] = tg;
-    }
-}
+    int k1 = 94, k2 = 55;
+    int pos1 = search(x, n, k1);
+    int pos2 = search(x, n, k2);
 
-int main() {
-    int n;
-    cout << "Bai 1: Sap xep noi bot voi Selection Sort\n";
-    cout << "Nhap so luong phan tu cua mang: ";
-    cin >> n;
+    printf("Bai 1:\n");
+    if (pos1 != -1)
+        printf("Tim thay %d tai vi tri %d\n", k1, pos1);
+    else
+        printf("Khong tim thay %d\n", k1);
 
-    // Khởi tạo mảng động
-    int* x = new int[n];
-
-    // Nhập mảng từ bàn phím
-    nhapMang(x, n);
-
-    // Hiển thị mảng ban đầu
-    cout << "Day so ban dau: ";
-    printArray(x, n);
-
-    // Sắp xếp mảng bằng Selection Sort
-    selectionSort(x, n);
-
-    // Hiển thị mảng sau khi sắp xếp
-    cout << "Day so sau khi sap xep giam dan: ";
-    printArray(x, n);
-
-    // Giải phóng bộ nhớ
-    delete[] x;
-
-    return 0;
+    if (pos2 != -1)
+        printf("Tim thay %d tai vi tri %d\n", k2, pos2);
+    else
+        printf("Khong tim thay %d\n", k2);
 }
