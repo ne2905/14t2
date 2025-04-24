@@ -1,61 +1,31 @@
-#include <iostream>
-using namespace std;
-
-// Hàm nhập mảng từ bàn phím
-void nhapMang(int x[], int n) {
-    cout << "Nhap " << n << " phan tu cua mang:\n";
-    for (int i = 0; i < n; i++) {
-        cout << "x[" << i << "] = ";
-        cin >> x[i];
-    }
+int binary_search(int x[], int left, int right, int k) {
+    if (left > right)
+        return -1;
+    int mid = (left + right) / 2;
+    if (x[mid] == k)
+        return mid;
+    else if (x[mid] > k)
+        return binary_search(x, left, mid - 1, k);
+    else
+        return binary_search(x, mid + 1, right, k);
 }
 
-// Hàm in mảng
-void printArray(int x[], int n) {
-    for (int i = 0; i < n; i++) {
-        cout << x[i] << " ";
-    }
-    cout << endl;
-}
+void bai2() {
+    int x[] = {4, 14, 24, 34, 54, 64, 74, 84, 94};
+    int n = sizeof(x) / sizeof(x[0]);
 
-// Hàm Bubble Sort (sắp xếp giảm dần)
-void bubbleSort(int x[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = n - 1; j > i; j--) {
-            if (x[j] > x[j - 1]) { // Sắp xếp giảm dần
-                int tg = x[j];
-                x[j] = x[j - 1];
-                x[j - 1] = tg;
-            }
-        }
-    }
-}
+    int k1 = 34, k2 = 60;
+    int pos1 = binary_search(x, 0, n - 1, k1);
+    int pos2 = binary_search(x, 0, n - 1, k2);
 
-int main() {
-    int n;
-    cout << "Bai 2: Sap xep lua chon voi Bubble Sort\n";
-    cout << "Nhap so luong phan tu cua mang: ";
-    cin >> n;
+    printf("\nBai 2:\n");
+    if (pos1 != -1)
+        printf("Tim thay %d tai vi tri %d\n", k1, pos1);
+    else
+        printf("Khong tim thay %d\n", k1);
 
-    // Khởi tạo mảng động
-    int* x = new int[n];
-
-    // Nhập mảng từ bàn phím
-    nhapMang(x, n);
-
-    // Hiển thị mảng ban đầu
-    cout << "Day so ban dau: ";
-    printArray(x, n);
-
-    // Sắp xếp mảng bằng Bubble Sort
-    bubbleSort(x, n);
-
-    // Hiển thị mảng sau khi sắp xếp
-    cout << "Day so sau khi sap xep giam dan: ";
-    printArray(x, n);
-
-    // Giải phóng bộ nhớ
-    delete[] x;
-
-    return 0;
+    if (pos2 != -1)
+        printf("Tim thay %d tai vi tri %d\n", k2, pos2);
+    else
+        printf("Khong tim thay %d\n", k2);
 }
