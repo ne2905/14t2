@@ -20,11 +20,11 @@ void create(Tro& L) {
     L = NULL;
 }
 
-int empty(Tro L) {
+bool empty(Tro L) {
     return L == NULL;
 }
 
-SinhVien taosv(const char* maSV, const char* hoDem, const char* ten, const char* gioiTinh, double diemTK) {
+SinhVien taoSV(const char* maSV, const char* hoDem, const char* ten, const char* gioiTinh, double diemTK) {
     SinhVien sv;
     strcpy(sv.maSV, maSV);
     strcpy(sv.hoDem, hoDem);
@@ -40,20 +40,21 @@ void add(Tro& L, SinhVien sv) {
         L = P;
     } else {
         Tro Q = L;
-        while (Q->next != NULL) Q = Q->next;
+        while (Q->next != NULL)
+            Q = Q->next;
         Q->next = P;
     }
 }
 
 void display(SinhVien sv) {
-    cout << left << setw(10) << sv.maSV
+    cout << setw(8) << left << sv.maSV
          << setw(15) << sv.hoDem
          << setw(10) << sv.ten
-         << setw(8) << sv.gioiTinh
+         << setw(6) << sv.gioiTinh
          << fixed << setprecision(1) << sv.diemTK << endl;
 }
 
-void hienthi_ds(Tro L) {
+void htds(Tro L) {
     Tro Q = L;
     while (Q != NULL) {
         display(Q->info);
@@ -61,43 +62,56 @@ void hienthi_ds(Tro L) {
     }
 }
 
-void xoa_ten_Ha(Tro& L) {
-    while (L && strcmp(L->info.ten, "Hà") == 0) {
-        Tro tam = L;
-        L = L->next;
-        delete tam;
-    }
+void taoDS(Tro& L) {
+    add(L, taoSV("SV1001", "Tran Hong", "Quan", "Nam", 8.0));
+    add(L, taoSV("SV1002", "Nguyen Thu", "Lan", "Nu", 6.8));
+    add(L, taoSV("SV1003", "Nguyen Van", "Binh", "Nam", 6.4));
+    add(L, taoSV("SV1004", "Bui Thi", "Ha", "Nu", 7.3));
+    add(L, taoSV("SV1005", "Tran Hoai", "Son", "Nam", 8.9));
+}
 
+void xoa_sv_ten(Tro& L, const char* ten) {
+    while (L != NULL && strcmp(L->info.ten, ten) == 0) {
+        Tro tmp = L;
+        L = L->next;
+        delete tmp;
+    }
     Tro Q = L;
-    while (Q && Q->next) {
-        if (strcmp(Q->next->info.ten, "Hà") == 0) {
-            Tro tam = Q->next;
-            Q->next = tam->next;
-            delete tam;
+    while (Q != NULL && Q->next != NULL) {
+        if (strcmp(Q->next->info.ten, ten) == 0) {
+            Tro tmp = Q->next;
+            Q->next = Q->next->next;
+            delete tmp;
         } else {
             Q = Q->next;
         }
     }
 }
 
-void tim_kiem_Binh_va_Ha(Tro L) {
+void tim_kiem(Tro L, const char* ten1, const char* ten2) {
     Tro Q = L;
-    while (Q) {
-        if (strcmp(Q->info.ten, "Bình") == 0 || strcmp(Q->info.ten, "Hà") == 0) {
+    while (Q != NULL) {
+        if (strcmp(Q->info.ten, ten1) == 0 || strcmp(Q->info.ten, ten2) == 0) {
             display(Q->info);
         }
         Q = Q->next;
     }
 }
 
-void sap_xep_bubble(Tro& L) {
-    if (!L || !L->next) return;
+void swap(SinhVien& a, SinhVien& b) {
+    SinhVien temp = a;
+    a = b;
+    b = temp;
+}
+
+void bubbleSort(Tro& L) {
+    if (L == NULL || L->next == NULL) return;
     bool swapped;
     do {
         swapped = false;
         Tro p = L;
-        while (p->next) {
-            if (strcmp(p->info.ten, p->next->info.ten) > 0) {
+        while (p->next != NULL) {
+            if (p->info.diemTK > p->next->info.diemTK) {
                 swap(p->info, p->next->info);
                 swapped = true;
             }
@@ -106,32 +120,24 @@ void sap_xep_bubble(Tro& L) {
     } while (swapped);
 }
 
-void tao_ds(Tro& L) {
-    add(L, taosv("SV1001", "Trần Hồng", "Quân", "Nam", 8.0));
-    add(L, taosv("SV1002", "Nguyễn Thu", "Lan", "Nữ", 6.8));
-    add(L, taosv("SV1003", "Nguyễn Văn", "Bình", "Nam", 6.4));
-    add(L, taosv("SV1004", "Bùi Thị", "Hà", "Nữ", 7.3));
-    add(L, taosv("SV1005", "Trần Hoài", "Sơn", "Nam", 8.9));
-}
-
 int main() {
     Tro L;
     create(L);
-    tao_ds(L);
+    taoDS(L);
 
     cout << "Danh sach ban dau:\n";
-    hienthi_ds(L);
+    htds(L);
 
-    xoa_ten_Ha(L);
-    cout << "\nDanh sach sau khi xoa SV ten 'Hà':\n";
-    hienthi_ds(L);
+    xoa_sv_ten(L, "Ha");
+    cout << "\nDanh sach sau khi xoa sinh vien ten 'Ha':\n";
+    htds(L);
 
-    cout << "\nThong tin SV ten 'Bình' va 'Hà':\n";
-    tim_kiem_Binh_va_Ha(L);
+    cout << "\nTim sinh vien ten 'Binh' va 'Lan':\n";
+    tim_kiem(L, "Binh", "Lan");
 
-    sap_xep_bubble(L);
-    cout << "\nDanh sach sau khi sap xep theo ten:\n";
-    hienthi_ds(L);
+    bubbleSort(L);
+    cout << "\nDanh sach sau khi sap xep tang dan theo diemTK:\n";
+    htds(L);
 
     return 0;
 }
