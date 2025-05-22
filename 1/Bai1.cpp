@@ -1,155 +1,137 @@
-#include <iostream>
-#include <cstring>
+#include <bits/stdc++.h>
 using namespace std;
 
-#define MAX 8 // Define maximum size for the array
-
-struct SINHVIEN {
-    int masv;
-    char hodem[20];
-    char ten[10];
-    char gioitinh[10];
-    int namsinh;
-    float diemtk;
+struct SinhVien {
+    char maSV[10];
+    char hoDem[25];
+    char ten[15];
+    char gioiTinh[5];
+    double diemTK;
 };
 
-struct vector {
-    int count;
-    SINHVIEN e[MAX];
+struct Node {
+    SinhVien info;
+    Node* next;
 };
 
-// Check if the vector is full
-bool full(vector &v) {
-    return v.count >= MAX;
+typedef Node* Tro;
+
+void create(Tro& L) {
+    L = NULL;
 }
 
-// Create a new SINHVIEN
-SINHVIEN taoSv(int masv, const char* hodem, const char* ten, const char* gioitinh, int namsinh, float diemtk) {
-    SINHVIEN sv;
-    sv.masv = masv;
-    strcpy(sv.hodem, hodem);
+int empty(Tro L) {
+    return L == NULL;
+}
+
+SinhVien taosv(const char* maSV, const char* hoDem, const char* ten, const char* gioiTinh, double diemTK) {
+    SinhVien sv;
+    strcpy(sv.maSV, maSV);
+    strcpy(sv.hoDem, hoDem);
     strcpy(sv.ten, ten);
-    strcpy(sv.gioitinh, gioitinh);
-    sv.namsinh = namsinh;
-    sv.diemtk = diemtk;
+    strcpy(sv.gioiTinh, gioiTinh);
+    sv.diemTK = diemTK;
     return sv;
 }
 
-// Display the list of students
-void hienThiDs(vector &v) {
-    cout << "\nDanh sach sinh vien:\n";
-    for (int i = 0; i < v.count; i++) {
-        cout << "Sinh vien " << i + 1 << ":\n";
-        cout << "Ma SV: " << v.e[i].masv << "\n";
-        cout << "Ho dem: " << v.e[i].hodem << "\n";
-        cout << "Ten: " << v.e[i].ten << "\n";
-        cout << "Gioi tinh: " << v.e[i].gioitinh << "\n";
-        cout << "Nam sinh: " << v.e[i].namsinh << "\n";
-        cout << "Diem TK: " << v.e[i].diemtk << "\n\n";
-    }
-}
-
-// Remove the first element
-void xoaptdt(vector &v) {
-    if (v.count <= 0) {
-        cout << "\nDanh sach rong...!\n";
-        return;
-    }
-    for (int i = 0; i < v.count - 1; i++) {
-        v.e[i] = v.e[i + 1];
-    }
-    v.count--;
-}
-
-// Insert a student at position pos (1-based indexing)
-int insert(vector &v, int pos, SINHVIEN x) {
-    if (pos <= v.count + 1 && pos > 0 && !full(v)) {
-        for (int i = v.count; i >= pos; i--) {
-            v.e[i] = v.e[i - 1];
-        }
-        v.e[pos - 1] = x;
-        v.count++;
-        return 1;
-    }
-    return 0;
-}
-
-// Insert a specific student at position 3
-void chenSvVaoViTri3(vector &v) {
-    SINHVIEN sv = taoSv(1006, "Le Thi", "Doan", "Nu", 1998, 7.6);
-    if (insert(v, 3, sv)) {
-        cout << "\nChen thanh cong...!";
-        cout << "\nDanh sach sau khi chen:\n";
-        hienThiDs(v);
+void add(Tro& L, SinhVien sv) {
+    Tro P = new Node{sv, NULL};
+    if (empty(L)) {
+        L = P;
     } else {
-        cout << "\nChen khong thanh cong...!\n";
+        Tro Q = L;
+        while (Q->next != NULL) Q = Q->next;
+        Q->next = P;
     }
 }
 
-// Sort students by name (ten)
-void sapXepTheoTen(vector &v) {
-    for (int i = 0; i < v.count - 1; i++) {
-        int min_idx = i;
-        for (int j = i + 1; j < v.count; j++) {
-            if (strcmp(v.e[j].ten, v.e[min_idx].ten) < 0) {
-                min_idx = j;
-            }
-        }
-        if (min_idx != i) {
-            SINHVIEN tg = v.e[i];
-            v.e[i] = v.e[min_idx];
-            v.e[min_idx] = tg;
+void display(SinhVien sv) {
+    cout << left << setw(10) << sv.maSV
+         << setw(15) << sv.hoDem
+         << setw(10) << sv.ten
+         << setw(8) << sv.gioiTinh
+         << fixed << setprecision(1) << sv.diemTK << endl;
+}
+
+void hienthi_ds(Tro L) {
+    Tro Q = L;
+    while (Q != NULL) {
+        display(Q->info);
+        Q = Q->next;
+    }
+}
+
+void xoa_ten_Ha(Tro& L) {
+    while (L && strcmp(L->info.ten, "Hà") == 0) {
+        Tro tam = L;
+        L = L->next;
+        delete tam;
+    }
+
+    Tro Q = L;
+    while (Q && Q->next) {
+        if (strcmp(Q->next->info.ten, "Hà") == 0) {
+            Tro tam = Q->next;
+            Q->next = tam->next;
+            delete tam;
+        } else {
+            Q = Q->next;
         }
     }
+}
+
+void tim_kiem_Binh_va_Ha(Tro L) {
+    Tro Q = L;
+    while (Q) {
+        if (strcmp(Q->info.ten, "Bình") == 0 || strcmp(Q->info.ten, "Hà") == 0) {
+            display(Q->info);
+        }
+        Q = Q->next;
+    }
+}
+
+void sap_xep_bubble(Tro& L) {
+    if (!L || !L->next) return;
+    bool swapped;
+    do {
+        swapped = false;
+        Tro p = L;
+        while (p->next) {
+            if (strcmp(p->info.ten, p->next->info.ten) > 0) {
+                swap(p->info, p->next->info);
+                swapped = true;
+            }
+            p = p->next;
+        }
+    } while (swapped);
+}
+
+void tao_ds(Tro& L) {
+    add(L, taosv("SV1001", "Trần Hồng", "Quân", "Nam", 8.0));
+    add(L, taosv("SV1002", "Nguyễn Thu", "Lan", "Nữ", 6.8));
+    add(L, taosv("SV1003", "Nguyễn Văn", "Bình", "Nam", 6.4));
+    add(L, taosv("SV1004", "Bùi Thị", "Hà", "Nữ", 7.3));
+    add(L, taosv("SV1005", "Trần Hoài", "Sơn", "Nam", 8.9));
 }
 
 int main() {
-    vector ds;
-    ds.count = 0;
+    Tro L;
+    create(L);
+    tao_ds(L);
 
-    // Insert some initial students for testing
-    SINHVIEN sv1 = taoSv(1001, "Nguyen Van", "An", "Nam", 2000, 8.5);
-    SINHVIEN sv2 = taoSv(1002, "Tran Thi", "Binh", "Nu", 1999, 7.8);
-    insert(ds, 1, sv1);
-    insert(ds, 2, sv2);
+    cout << "Danh sach ban dau:\n";
+    hienthi_ds(L);
 
-    // Insert student at position 3
-    chenSvVaoViTri3(ds);
+    xoa_ten_Ha(L);
+    cout << "\nDanh sach sau khi xoa SV ten 'Hà':\n";
+    hienthi_ds(L);
 
-    // Sort by name
-    sapXepTheoTen(ds);
+    cout << "\nThong tin SV ten 'Bình' va 'Hà':\n";
+    tim_kiem_Binh_va_Ha(L);
+
+    sap_xep_bubble(L);
     cout << "\nDanh sach sau khi sap xep theo ten:\n";
-    hienThiDs(ds);
-
-    // Input additional students
-    cout << "Nhap so sinh vien: ";
-    int n;
-    cin >> n;
-    cin.ignore(); // Clear buffer
-
-    for (int i = 0; i < n && !full(ds); i++) {
-        SINHVIEN sv;
-        cout << "\nNhap thong tin sinh vien thu " << i + 1 << ":\n";
-        cout << "Ma SV: ";
-        cin >> sv.masv;
-        cin.ignore();
-        cout << "Ho dem: ";
-        cin.getline(sv.hodem, 20);
-        cout << "Ten: ";
-        cin.getline(sv.ten, 10);
-        cout << "Gioi tinh: ";
-        cin.getline(sv.gioitinh, 10);
-        cout << "Nam sinh: ";
-        cin >> sv.namsinh;
-        cout << "Diem TK: ";
-        cin >> sv.diemtk;
-        cin.ignore();
-        insert(ds, ds.count + 1, sv);
-    }
-
-    // Display final list
-    cout << "\nDanh sach sinh vien cuoi cung:\n";
-    hienThiDs(ds);
+    hienthi_ds(L);
 
     return 0;
 }
