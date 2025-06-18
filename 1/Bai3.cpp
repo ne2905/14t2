@@ -1,73 +1,95 @@
 #include <iostream>
-#include <string>
 #include <vector>
-#include <algorithm>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
-struct HocSinh {
-    string hoTen;
-    string gioiTinh;
-    int namSinh;
-    float diemTongKet;
-};
+// Generate a random integer in a given range
+long long getRandom(long long low, long long high) {
+    return low + rand() % (high - low);
+}
 
-// Tìm kiếm tuyến tính theo tên và điểm
-int timTheoTenVaDiem(const vector<HocSinh>& ds, string ten, float diem) {
-    for (int i = 0; i < ds.size(); i++) {
-        if (ds[i].hoTen == ten && ds[i].diemTongKet == diem)
-            return i;
+// Calculate gcd
+long long gcd(long long a, long long b) {
+    if (a < b)
+        return gcd(b, a);
+    else if (a % b == 0)
+        return b;
+    else
+        return gcd(b, a % b);
+}
+
+// Generate large random key
+long long gen_key(long long q) {
+    long long key = getRandom(pow(10, 5), q);  // Use smaller range for demonstration
+    while (gcd(q, key) != 1) {
+        key = getRandom(pow(10, 5), q);
     }
-    return -1;
+    return key;
 }
 
-// Tìm kiếm nhị phân theo điểm tổng kết (danh sách đã sắp xếp giảm dần)
-int timTheoDiem(const vector<HocSinh>& ds, int left, int right, float diem) {
-    if (left > right)
-        return -1;
+// Modular exponentiation
+long long power(long long a, long long b, long long c) {
+    long long x = 1;
+    long long y = a;
 
-    int mid = (left + right) / 2;
-
-    if (ds[mid].diemTongKet == diem)
-        return mid;
-    else if (ds[mid].diemTongKet < diem) // tìm bên trái vì giảm dần
-        return timTheoDiem(ds, left, mid - 1, diem);
-    else
-        return timTheoDiem(ds, mid + 1, right, diem);
+    while (b > 0) {
+        if (b % 2 != 0)
+            x = (x * y) % c;
+        y = (y * y) % c;
+        b = b / 2;
+    }
+    return x % c;
 }
 
-// Hàm main minh họa
+// Encrypt message
+pair<vector<long long>, long long> encrypt(string msg, long long q, long long h, long long g) {
+    vector<long long> en_msg;
+    long long k = gen_key(q); // sender's private key
+    long long s = power(h, k, q);
+    long long p = power(g, k, q);
+
+    for (char ch : msg) {
+        en_msg.push_back(s * int(ch));
+    }
+
+    cout << "g^k used : " << p << endl;
+    cout << "g^ak used : " << s << endl;
+
+    return {en_msg, p};
+}
+
+// Decrypt message
+string decrypt(vector<long long> en_msg, long long p, long long key, long long q) {
+    string dr_msg = "";
+    long long h = power(p, key, q);
+
+    for (long long val : en_msg) {
+        dr_msg += char(val / h);
+    }
+
+    return dr_msg;
+}
+
 int main() {
-    vector<HocSinh> ds = {
-        {"Nguyen Van A", "Nam", 2005, 9.0},
-        {"Tran Thi B", "Nu", 2004, 8.5},
-        {"Le Van C", "Nam", 2005, 8.0},
-        {"Pham Thi D", "Nu", 2003, 7.5}
-    };
+    srand(time(0));
+    string msg = "encryption";
+    cout << "Original Message: " << msg << endl;
 
-    // Sắp xếp danh sách theo điểm giảm dần
-    sort(ds.begin(), ds.end(), [](HocSinh a, HocSinh b) {
-        return a.diemTongKet > b.diemTongKet;
-    });
+    long long q = getRandom(pow(10, 5), pow(10, 6));  // Use smaller q for demonstration
+    long long g = getRandom(2, q);
 
-    string ten;
-    float diem;
+    long long key = gen_key(q); // receiver's private key
+    long long h = power(g, key, q);
+    cout << "g used: " << g << endl;
+    cout << "g^a used: " << h << endl;
 
-    cout << "Nhap ten hoc sinh can tim: ";
-    getline(cin, ten);
-    cout << "Nhap diem tong ket: ";
-    cin >> diem;
+    auto [en_msg, p] = encrypt(msg, q, h, g);
+    string dmsg = decrypt(en_msg, p, key, q);
 
-    int viTri1 = timTheoTenVaDiem(ds, ten, diem);
-    if (viTri1 != -1)
-        cout << "Tim thay bang tim tuyen tinh o vi tri: " << viTri1 << endl;
-    else
-        cout << "Khong tim thay bang tim tuyen tinh.\n";
-
-    int viTri2 = timTheoDiem(ds, 0, ds.size() - 1, diem);
-    if (viTri2 != -1)
-        cout << "Tim thay bang tim nhi phan o vi tri: " << viTri2 << endl;
-    else
-        cout << "Khong tim thay bang tim nhi phan.\n";
+    cout << "Decrypted Message: " << dmsg << endl;
 
     return 0;
 }
