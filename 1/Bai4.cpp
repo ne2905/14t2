@@ -1,60 +1,81 @@
-#include <iostream>
-#include <string>
+// Chương trình C++ mô phỏng thuật toán mã hóa RSA (Dịch tiếng Việt hoàn toàn)
+
+#include <bits/stdc++.h> // Thư viện chuẩn
+
 using namespace std;
 
-// Định nghĩa cấu trúc học sinh
-struct Student {
-    string hoTen;
-    string gioiTinh;
-    int namSinh;
-    float diemTongKet;
-};
-
-// Hàm nhập thông tin học sinh
-void nhapDanhSach(Student ds[], int n) {
-    for (int i = 0; i < n; i++) {
-        cout << "Nhap thong tin hoc sinh thu " << i + 1 << ":\n";
-        cin.ignore(); // Xóa bộ đệm trước khi nhập chuỗi
-        cout << "Ho va ten: ";
-        getline(cin, ds[i].hoTen);
-        cout << "Gioi tinh (Nam/Nu): ";
-        getline(cin, ds[i].gioiTinh);
-        cout << "Nam sinh: ";
-        cin >> ds[i].namSinh;
-        cout << "Diem tong ket: ";
-        cin >> ds[i].diemTongKet;
+// Hàm tính (coSo^soMu) mod modulo
+int luyThuaModulo(int coSo, int soMu, int modulo) {
+    int ketQua = 1;
+    coSo = coSo % modulo;
+    while (soMu > 0) {
+        if (soMu & 1)
+            ketQua = (ketQua * 1LL * coSo) % modulo;
+        coSo = (coSo * 1LL * coSo) % modulo;
+        soMu = soMu / 2;
     }
+    return ketQua;
 }
 
-// Hàm hiển thị danh sách học sinh
-void hienThiDanhSach(Student ds[], int n) {
-    cout << "\nDanh sach hoc sinh:\n";
-    cout << "STT\tHo va Ten\tGioi Tinh\tNam Sinh\tDiem Tong Ket\n";
-    for (int i = 0; i < n; i++) {
-        cout << i + 1 << "\t" << ds[i].hoTen << "\t\t" << ds[i].gioiTinh 
-             << "\t\t" << ds[i].namSinh << "\t\t" << ds[i].diemTongKet << endl;
+// Hàm tìm nghịch đảo modulo của e theo phi
+int timNghichDaoModulo(int e, int phi) {
+    for (int d = 2; d < phi; d++) {
+        if ((e * d) % phi == 1)
+            return d;
     }
+    return -1;
 }
 
-// Hàm Selection Sort theo tên (tăng dần)
-void selectionSortByName(Student ds[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        int m = i; // Vị trí phần tử nhỏ nhất (theo tên)
-        for (int j = i + 1; j < n; j++) {
-            if (ds[j].hoTen < ds[m].hoTen) { // So sánh tên để sắp xếp tăng dần
-                m = j;
-            }
-        }
-        // Hoán đổi
-        Student tg = ds[m];
-        ds[m] = ds[i];
-        ds[i] = tg;
+// Hàm sinh khóa RSA: tạo e, d, n
+void sinhKhoa(int &e, int &d, int &n) {
+    int p = 7919; // Số nguyên tố thứ nhất
+    int q = 1009; // Số nguyên tố thứ hai
+
+    n = p * q; // Tính n = p * q
+    int phi = (p - 1) * (q - 1); // Tính phi(n)
+
+    // Tìm e sao cho gcd(e, phi) = 1
+    for (e = 2; e < phi; e++) {
+        if (__gcd(e, phi) == 1)
+            break;
     }
+
+    // Tính d là nghịch đảo modulo của e
+    d = timNghichDaoModulo(e, phi);
 }
 
-// Hàm Bubble Sort theo tuổi (tăng dần, tuổi = năm hiện tại - năm sinh)
-void bubbleSortByAge(Student ds[], int n) {
-    int currentYear = 2025; // Năm hiện tại (theo ngày 10/04/2025)
-    for (int i = 0; i <  n - 1; i++) {
-        for (int j = n - 1; j > i; j--) {
-            int tuoiJ
+// Hàm mã hóa thông điệp gốc M
+int maHoa(int thongDiepGoc, int e, int n) {
+    return luyThuaModulo(thongDiepGoc, e, n);
+}
+
+// Hàm giải mã bản mã C
+int giaiMa(int banMa, int d, int n) {
+    return luyThuaModulo(banMa, d, n);
+}
+
+// Chương trình chính
+int main() {
+    int e, d, n; // e: số mũ công khai, d: số mũ bí mật, n: modulus
+
+    // Sinh khóa RSA
+    sinhKhoa(e, d, n);
+
+    // In ra khóa công khai và khóa bí mật
+    cout << "🔓 Khóa công khai (e, n): (" << e << ", " << n << ")\n";
+    cout << "🔐 Khóa bí mật (d, n): (" << d << ", " << n << ")\n";
+
+    // Thông điệp cần mã hóa
+    int thongDiepGoc = 123;
+    cout << "thông điệp gốc: " << thongDiepGoc << endl;
+
+    // Mã hóa thông điệp
+    int banMa = maHoa(thongDiepGoc, e, n);
+    cout << "Thông điệp sau mã hóa: " << banMa << endl;
+
+    // Giải mã bản mã
+    int thongDiepGiaiMa = giaiMa(banMa, d, n);
+    cout << "Thông điệp sau giải mã: " << thongDiepGiaiMa << endl;
+
+    return 0;
+}
