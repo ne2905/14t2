@@ -1,109 +1,101 @@
-#include <bits/stdc++.h> // Thư viện chuẩn C++
-using namespace std;
+import random 
+from math import pow
 
-// Hàm kiểm tra số nguyên tố đơn giản
-bool laNguyenTo(int n) {
-    if (n <= 1) return false;
-    if (n == 2) return true;
-    if (n % 2 == 0) return false;
-    for (int i = 3; i <= sqrt(n); i += 2)
-        if (n % i == 0) return false;
-    return true;
-}
+a = random.randint(2, 10)
 
-// Hàm tính (cơ số ^ số mũ) mod modulo
-int luyThuaModulo(int coSo, int soMu, int modulo) {
-    int ketQua = 1;
-    coSo = coSo % modulo;
-    while (soMu > 0) {
-        if (soMu & 1)
-            ketQua = (1LL * ketQua * coSo) % modulo;
-        coSo = (1LL * coSo * coSo) % modulo;
-        soMu = soMu / 2;
-    }
-    return ketQua;
-}
+def isPrime(n):
+    if n<2:
+        return False
+    for i in range(2, int(n**0.5)+1):
+        if n%i==0:
+            return False
+    return True
 
-// Hàm tìm nghịch đảo modulo của e theo phi (thử từ 2 đến phi)
-int timNghichDaoModulo(int e, int phi) {
-    for (int d = 2; d < phi; d++) {
-        if ((1LL * e * d) % phi == 1)
-            return d;
-    }
-    return -1; // Không tìm được
-}
+def gcd(a, b):
+    if a < b:
+        return gcd(b, a)
+    elif a % b == 0:
+        return b;
+    else:
+        return gcd(b, a % b)
 
-// Hàm sinh khóa RSA: nhập p, q, tạo e, d, n
-void sinhKhoa(int &e, int &d, int &n) {
-    int p, q;
+# Generating large random numbers
+def gen_key(q):
 
-    // Nhập và kiểm tra số nguyên tố p
-    do {
-        cout << "🔢 Nhập số nguyên tố p: ";
-        cin >> p;
-        if (!laNguyenTo(p)) cout << "⚠️ p không phải là số nguyên tố. Vui lòng nhập lại.\n";
-    } while (!laNguyenTo(p));
+    key = random.randint(2, q-1)
+    while gcd(q, key) != 1:
+        key = random.randint(2, q-1)
 
-    // Nhập và kiểm tra số nguyên tố q
-    do {
-        cout << "🔢 Nhập số nguyên tố q (khác p): ";
-        cin >> q;
-        if (!laNguyenTo(q) || q == p) cout << "⚠️ q không hợp lệ. Vui lòng nhập lại.\n";
-    } while (!laNguyenTo(q) || q == p);
+    return key
 
-    n = p * q;
-    int phi = (p - 1) * (q - 1);
+# Modular exponentiation
+def power(a, b, c):
+    x = 1
+    y = a
 
-    // Tìm e sao cho gcd(e, phi) = 1
-    for (e = 2; e < phi; e++) {
-        if (__gcd(e, phi) == 1)
-            break;
-    }
+    while b > 0:
+        if b % 2 != 0:
+            x = (x * y) % c;
+        y = (y * y) % c
+        b = int(b / 2)
 
-    // Tìm d là nghịch đảo của e mod phi
-    d = timNghichDaoModulo(e, phi);
-    if (d == -1) {
-        cout << "❌ Không tìm được nghịch đảo modular. Kết thúc chương trình.\n";
-        exit(1);
-    }
-}
+    return x % c
 
-// Hàm mã hóa thông điệp gốc
-int maHoa(int thongDiepGoc, int e, int n) {
-    return luyThuaModulo(thongDiepGoc, e, n);
-}
+# Asymmetric encryption
+def encrypt(msg, q, h, g):
 
-// Hàm giải mã bản mã
-int giaiMa(int banMa, int d, int n) {
-    return luyThuaModulo(banMa, d, n);
-}
+    en_msg = []
 
-// Hàm main chính
-int main() {
-    int e, d, n; // e: khóa công khai, d: khóa bí mật, n: modulus
+    k = gen_key(q)# Private key for sender
+    s = power(h, k, q)
+    p = power(g, k, q)
+    
+    for i in range(0, len(msg)):
+        en_msg.append(msg[i])
 
-    // Sinh khóa
-    sinhKhoa(e, d, n);
+    print("g^k used : ", p)
+    print("g^ak used : ", s)
+    for i in range(0, len(en_msg)):
+        en_msg[i] = s * ord(en_msg[i])
 
-    // Hiển thị khóa
-    cout << "\n🔓 Khóa công khai (e, n): (" << e << ", " << n << ")\n";
-    cout << "🔐 Khóa bí mật (d, n): (" << d << ", " << n << ")\n";
+    return en_msg, p
 
-    // Nhập thông điệp cần mã hóa
-    int thongDiepGoc;
-    do {
-        cout << "📨 Nhập thông điệp gốc (số nguyên < " << n << "): ";
-        cin >> thongDiepGoc;
-        if (thongDiepGoc >= n) cout << "⚠️ Thông điệp quá lớn. Nhập lại.\n";
-    } while (thongDiepGoc >= n);
+def decrypt(en_msg, p, key, q):
 
-    // Mã hóa và giải mã
-    int banMa = maHoa(thongDiepGoc, e, n);
-    int thongDiepGiaiMa = giaiMa(banMa, d, n);
+    dr_msg = []
+    h = power(p, key, q)
+    for i in range(0, len(en_msg)):
+        dr_msg.append(chr(int(en_msg[i]/h)))
+        
+    return dr_msg
 
-    // In kết quả
-    cout << "🔒 Bản mã (sau mã hóa): " << banMa << endl;
-    cout << "📬 Thông điệp sau giải mã: " << thongDiepGiaiMa << endl;
+# Driver code
+def main():
+    try:
+        q=int(input("Nhập số nguyên lớn q (nguyên tố): "))
+        if q < 1000 or not isPrime(q):
+            raise ValueError("q phải là số nguyên tố và lớn hơn 1000")
 
-    return 0;
-}
+        g = int(input(f"Nhập g (0 < g < {q}): "))
+        if g <= 1 or g >= q:
+            raise ValueError("g phải > 1 và < q")
+
+        msg = input("Nhập thông điệp cần mã hóa: ")
+        if not msg.strip():
+            raise ValueError("Thông điệp không được rỗng")
+
+        key = gen_key(q)# Private key for receiver
+        h = power(g, key, q)
+        print("g used : ", g)
+        print("g^a used : ", h)
+
+        en_msg, p = encrypt(msg, q, h, g)
+        dr_msg = decrypt(en_msg, p, key, q)
+        dmsg = ''.join(dr_msg)
+        print("Decrypted Message :", dmsg);
+
+    except ValueError as ve:
+        print("LỖI:", ve)
+
+if __name__ == '__main__':
+    main()
