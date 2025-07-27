@@ -1,81 +1,42 @@
-// C++ Program for implementation of RSA Algorithm
+public abstract class TaiLieu {
+    protected String maTL;
+    protected String tenTL;
+    protected int namXB;
+    protected int soTrang;
 
-#include <bits/stdc++.h>
-
-using namespace std;
-
-// Function to compute base^expo mod m
-int power(int base, int expo, int m) {
-    int res = 1;
-    base = base % m;
-    while (expo > 0) {
-        if (expo & 1)
-            res = (res * 1LL * base) % m;
-        base = (base * 1LL * base) % m;
-        expo = expo / 2;
-    }
-    return res;
-}
-
-// Function to find modular inverse of e modulo phi(n)
-// Here we are calculating phi(n) using Hit and Trial Method
-// but we can optimize it using Extended Euclidean Algorithm
-int modInverse(int e, int phi) {
-    for (int d = 2; d < phi; d++) {
-        if ((e * d) % phi == 1)
-            return d;
-    }
-    return -1;
-}
-
-// RSA Key Generation
-void generateKeys(int &e, int &d, int &n) {
-    int p = 7919;
-    int q = 1009;
-    
-    n = p * q;
-    int phi = (p - 1) * (q - 1);
-
-    // Choose e, where 1 < e < phi(n) and gcd(e, phi(n)) == 1
-    for (e = 2; e < phi; e++) {
-        if (__gcd(e, phi) == 1)
-            break;
+    public TaiLieu() {
+        this.maTL = "";
+        this.tenTL = "";
+        this.namXB = 2020;
+        this.soTrang = 1;
     }
 
-    // Compute d such that e * d ≡ 1 (mod phi(n))
-    d = modInverse(e, phi);
-}
+    public TaiLieu(String maTL, String tenTL, int namXB, int soTrang) {
+        this.maTL = maTL;
+        this.tenTL = tenTL;
+        this.namXB = namXB;
+        this.soTrang = soTrang;
+    }
 
-// Encrypt message using public key (e, n)
-int encrypt(int m, int e, int n) {
-    return power(m, e, n);
-}
+    public boolean kiemTraSoTrang() {
+        if (soTrang == 0) {
+            System.out.println("Số trang bằng 0, vui lòng kiểm tra lại!");
+            return false;
+        } else if (soTrang < 0) {
+            System.out.println("Dữ liệu không hợp lệ (số trang < 0)!");
+            return false;
+        } else if (soTrang > 500) {
+            System.out.println("Tài liệu có số trang quá dày!");
+        }
+        return true;
+    }
 
-// Decrypt message using private key (d, n)
-int decrypt(int c, int d, int n) {
-    return power(c, d, n);
-}
+    public abstract String loaiTaiLieu(); // để phân loại khi hiển thị
 
-int main() {
-    int e, d, n;
-    
-    // Key Generation
-    generateKeys(e, d, n);
-  
-    cout << "Public Key (e, n): (" << e << ", " << n << ")\n";
-    cout << "Private Key (d, n): (" << d << ", " << n << ")\n";
+    public void inThongTin() {
+        System.out.printf("%-10s %-20s %-10d %-10d %-10s\n", maTL, tenTL, namXB, soTrang, loaiTaiLieu());
+    }
 
-    // Message
-    int M = 123;
-    cout << "Original Message: " << M << endl;
-
-    // Encrypt the message
-    int C = encrypt(M, e, n);
-    cout << "Encrypted Message: " << C << endl;
-
-    // Decrypt the message
-    int decrypted = decrypt(C, d, n);
-    cout << "Decrypted Message: " << decrypted << endl;
-
-    return 0;
+    // Getters và Setters
+    // ...
 }
