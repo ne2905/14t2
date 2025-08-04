@@ -1,81 +1,71 @@
-// Chương trình C++ mô phỏng thuật toán mã hóa RSA (Dịch tiếng Việt hoàn toàn)
+import java.io.*;
+import java.util.*;
 
-#include <bits/stdc++.h> // Thư viện chuẩn
+public class CongNhanControl {
+    private ArrayList<CongNhan> list = new ArrayList<>();
 
-using namespace std;
-
-// Hàm tính (coSo^soMu) mod modulo
-int luyThuaModulo(int coSo, int soMu, int modulo) {
-    int ketQua = 1;
-    coSo = coSo % modulo;
-    while (soMu > 0) {
-        if (soMu & 1)
-            ketQua = (ketQua * 1LL * coSo) % modulo;
-        coSo = (coSo * 1LL * coSo) % modulo;
-        soMu = soMu / 2;
-    }
-    return ketQua;
-}
-
-// Hàm tìm nghịch đảo modulo của e theo phi
-int timNghichDaoModulo(int e, int phi) {
-    for (int d = 2; d < phi; d++) {
-        if ((e * d) % phi == 1)
-            return d;
-    }
-    return -1;
-}
-
-// Hàm sinh khóa RSA: tạo e, d, n
-void sinhKhoa(int &e, int &d, int &n) {
-    int p = 7919; // Số nguyên tố thứ nhất
-    int q = 1009; // Số nguyên tố thứ hai
-
-    n = p * q; // Tính n = p * q
-    int phi = (p - 1) * (q - 1); // Tính phi(n)
-
-    // Tìm e sao cho gcd(e, phi) = 1
-    for (e = 2; e < phi; e++) {
-        if (__gcd(e, phi) == 1)
-            break;
+    public void addData(CongNhan n) {
+        if (n.getTenCN() == null || n.getTenCN().isEmpty() || n.getTongGioLam() < 0) {
+            System.out.println("❌ Dữ liệu không hợp lệ!");
+            return;
+        }
+        for (CongNhan cn : list) {
+            if (cn.getMaCN().equalsIgnoreCase(n.getMaCN())) {
+                System.out.println("⚠️ Trùng mã CN, không thêm!");
+                return;
+            }
+        }
+        list.add(n);
     }
 
-    // Tính d là nghịch đảo modulo của e
-    d = timNghichDaoModulo(e, phi);
-}
+    public void getData() {
+        if (list.isEmpty()) {
+            System.out.println("📭 Danh sách rỗng!");
+            return;
+        }
+        System.out.printf("%-10s %-20s %-10s %-10s\n", "Mã CN", "Tên CN", "Ca", "Giờ làm");
+        for (CongNhan n : list) {
+            n.outputData();
+        }
+    }
 
-// Hàm mã hóa thông điệp gốc M
-int maHoa(int thongDiepGoc, int e, int n) {
-    return luyThuaModulo(thongDiepGoc, e, n);
-}
+    public void fakeData() {
+        list.add(new CongNhan("CN01", "Nguyễn Văn A", CaType.Ca1, 40));
+        list.add(new CongNhan("CN02", "Trần Thị B", CaType.Ca2, 50));
+        list.add(new CongNhan("CN03", "Lê Văn C", CaType.Ca3, 60));
+    }
 
-// Hàm giải mã bản mã C
-int giaiMa(int banMa, int d, int n) {
-    return luyThuaModulo(banMa, d, n);
-}
+    public void sortData() {
+        Collections.sort(list, (a, b) -> {
+            int nameCompare = a.getTenCN().compareToIgnoreCase(b.getTenCN());
+            if (nameCompare == 0) {
+                return a.getCaLamViec().compareTo(b.getCaLamViec());
+            }
+            return nameCompare;
+        });
+    }
 
-// Chương trình chính
-int main() {
-    int e, d, n; // e: số mũ công khai, d: số mũ bí mật, n: modulus
+    public void saveToFile(String fileName) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(fileName))) {
+            for (CongNhan n : list) {
+                pw.println(n.toFileString());
+            }
+            System.out.println("✅ Lưu file thành công!");
+        } catch (IOException e) {
+            System.out.println("❌ Ghi file lỗi: " + e.getMessage());
+        }
+    }
 
-    // Sinh khóa RSA
-    sinhKhoa(e, d, n);
-
-    // In ra khóa công khai và khóa bí mật
-    cout << "🔓 Khóa công khai (e, n): (" << e << ", " << n << ")\n";
-    cout << "🔐 Khóa bí mật (d, n): (" << d << ", " << n << ")\n";
-
-    // Thông điệp cần mã hóa
-    int thongDiepGoc = 123;
-    cout << "thông điệp gốc: " << thongDiepGoc << endl;
-
-    // Mã hóa thông điệp
-    int banMa = maHoa(thongDiepGoc, e, n);
-    cout << "Thông điệp sau mã hóa: " << banMa << endl;
-
-    // Giải mã bản mã
-    int thongDiepGiaiMa = giaiMa(banMa, d, n);
-    cout << "Thông điệp sau giải mã: " << thongDiepGiaiMa << endl;
-
-    return 0;
+    public void readFromFile(String fileName) {
+        list.clear();
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                list.add(CongNhan.fromFileString(line));
+            }
+            System.out.println("✅ Đọc file thành công!");
+        } catch (IOException e) {
+            System.out.println("❌ Đọc file lỗi: " + e.getMessage());
+        }
+    }
 }
