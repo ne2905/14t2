@@ -1,3 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Tập JavaScript Cơ Bản</title>
+</head>
+<body>
+    <h1>Bài 2: Tính tổng các số từ 1 đến 50</h1>
+    <div id="total"></div>
+    <script>
+        let sum = 0;
+        for (let i = 1; i <= 50; i++) {
+            sum += i;
+        }
+        document.getElementById("total").textContent = "Tổng từ 1 đến 50 là: " + sum;
+    </script>
+</body>
+</html>
 import java.util.Scanner;
 
 public class CongNhan implements IUtils {
@@ -64,3 +83,4 @@ public class CongNhan implements IUtils {
         return new CongNhan(parts[0], parts[1], CaType.valueOf(parts[2]), Integer.parseInt(parts[3]));
     }
 }
+
