@@ -1,41 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bài Tập JavaScript Cơ Bản</title>
+    <title>Bài 8: do...while in tam giác</title>
+    <style>
+        pre {
+            font-size: 18px;
+            line-height: 1.2;
+        }
+    </style>
 </head>
 <body>
-    <h1>Bài 4: In danh sách tên sách và tác giả</h1>
-    <table border="1">
-        <tr>
-            <th>STT</th>
-            <th>Tên sách</th>
-            <th>Tác giả</th>
-        </tr>
-        <tbody id="bookList"></tbody>
-    </table>
+    <h2>Bài 8: Sử dụng do...while để in tam giác</h2>
+    <pre id="tamgiacDoWhile"></pre>
 
     <script>
-        let bookListDiv = document.getElementById("bookList");
-
-        for (let i = 1; i <= 10; i++) {
-            let row = document.createElement("tr");
-
-            let sttCell = document.createElement("td");
-            sttCell.textContent = i;
-            row.appendChild(sttCell);
-
-            let bookNameCell = document.createElement("td");
-            bookNameCell.textContent = "Ten sach" + i;
-            row.appendChild(bookNameCell);
-
-            let authorCell = document.createElement("td");
-            authorCell.textContent = "Ten tac gia" + i;
-            row.appendChild(authorCell);
-
-            bookListDiv.appendChild(row);
-        }
+        let tamgiac = "";
+        let i = 1;
+        do {
+            let j = 1;
+            do {
+                tamgiac += "*";
+                j++;
+            } while (j <= i);
+            tamgiac += "\n";
+            i++;
+        } while (i <= 5);
+        document.getElementById("tamgiacDoWhile").textContent = tamgiac;
     </script>
 </body>
 </html>
