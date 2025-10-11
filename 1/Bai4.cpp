@@ -1,71 +1,41 @@
-import java.io.*;
-import java.util.*;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Tập JavaScript Cơ Bản</title>
+</head>
+<body>
+    <h1>Bài 4: In danh sách tên sách và tác giả</h1>
+    <table border="1">
+        <tr>
+            <th>STT</th>
+            <th>Tên sách</th>
+            <th>Tác giả</th>
+        </tr>
+        <tbody id="bookList"></tbody>
+    </table>
 
-public class CongNhanControl {
-    private ArrayList<CongNhan> list = new ArrayList<>();
+    <script>
+        let bookListDiv = document.getElementById("bookList");
 
-    public void addData(CongNhan n) {
-        if (n.getTenCN() == null || n.getTenCN().isEmpty() || n.getTongGioLam() < 0) {
-            System.out.println("❌ Dữ liệu không hợp lệ!");
-            return;
+        for (let i = 1; i <= 10; i++) {
+            let row = document.createElement("tr");
+
+            let sttCell = document.createElement("td");
+            sttCell.textContent = i;
+            row.appendChild(sttCell);
+
+            let bookNameCell = document.createElement("td");
+            bookNameCell.textContent = "Ten sach" + i;
+            row.appendChild(bookNameCell);
+
+            let authorCell = document.createElement("td");
+            authorCell.textContent = "Ten tac gia" + i;
+            row.appendChild(authorCell);
+
+            bookListDiv.appendChild(row);
         }
-        for (CongNhan cn : list) {
-            if (cn.getMaCN().equalsIgnoreCase(n.getMaCN())) {
-                System.out.println("⚠️ Trùng mã CN, không thêm!");
-                return;
-            }
-        }
-        list.add(n);
-    }
-
-    public void getData() {
-        if (list.isEmpty()) {
-            System.out.println("📭 Danh sách rỗng!");
-            return;
-        }
-        System.out.printf("%-10s %-20s %-10s %-10s\n", "Mã CN", "Tên CN", "Ca", "Giờ làm");
-        for (CongNhan n : list) {
-            n.outputData();
-        }
-    }
-
-    public void fakeData() {
-        list.add(new CongNhan("CN01", "Nguyễn Văn A", CaType.Ca1, 40));
-        list.add(new CongNhan("CN02", "Trần Thị B", CaType.Ca2, 50));
-        list.add(new CongNhan("CN03", "Lê Văn C", CaType.Ca3, 60));
-    }
-
-    public void sortData() {
-        Collections.sort(list, (a, b) -> {
-            int nameCompare = a.getTenCN().compareToIgnoreCase(b.getTenCN());
-            if (nameCompare == 0) {
-                return a.getCaLamViec().compareTo(b.getCaLamViec());
-            }
-            return nameCompare;
-        });
-    }
-
-    public void saveToFile(String fileName) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(fileName))) {
-            for (CongNhan n : list) {
-                pw.println(n.toFileString());
-            }
-            System.out.println("✅ Lưu file thành công!");
-        } catch (IOException e) {
-            System.out.println("❌ Ghi file lỗi: " + e.getMessage());
-        }
-    }
-
-    public void readFromFile(String fileName) {
-        list.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                list.add(CongNhan.fromFileString(line));
-            }
-            System.out.println("✅ Đọc file thành công!");
-        } catch (IOException e) {
-            System.out.println("❌ Đọc file lỗi: " + e.getMessage());
-        }
-    }
-}
+    </script>
+</body>
+</html>
