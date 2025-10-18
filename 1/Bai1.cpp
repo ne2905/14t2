@@ -24,15 +24,26 @@
 
     /* HEADER */
     header {
+      position: relative;
       background: #eee;
+      padding: 20px 0 15px 0;
       text-align: center;
-      padding: 20px;
     }
 
-    .logo h1 {
+    header h2 {
+      font-size: 22px;
+      color: #004d26;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .logo {
+      position: absolute;
+      right: 30px;
+      top: 15px;
+      font-size: 32px;
+      font-weight: bold;
       color: #006633;
-      font-size: 36px;
-      margin-bottom: 5px;
     }
 
     /* MENU */
@@ -103,12 +114,13 @@
     .banner-text {
       position: absolute;
       bottom: 40px;
-      left: 60px;
+      left: 30px; /* 👈 sát trái hơn */
       background: rgba(0, 0, 0, 0.55);
       color: #fff;
       padding: 20px 25px;
       border-radius: 6px;
-      max-width: 45%;
+      max-width: 40%;
+      text-align: left; /* 👈 căn trái chữ */
     }
 
     .banner-text h2 {
@@ -193,10 +205,8 @@
 
     <!-- HEADER -->
     <header>
-      <div class="logo">
-        <h1>HTC</h1>
-        <p>CÔNG TY TNHH HỮU HẠN HIỆP THÀNH</p>
-      </div>
+      <h2>CÔNG TY TRÁCH NHIỆM HỮU HẠN HIỆP THÀNH</h2>
+      <div class="logo">HTC</div>
     </header>
 
     <!-- MENU 2 CẤP -->
