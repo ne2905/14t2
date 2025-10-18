@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HTC - Hiệp Thành Company</title>
+  <title>Nhà Việt Xanh</title>
   <style>
     * {
       margin: 0;
@@ -13,42 +13,60 @@
     }
 
     body {
-      background: #f6f6f6;
+      background: #f5f5f5;
     }
 
     .container {
-      width: 90%;
+      width: 95%;
       margin: 0 auto;
       background: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     /* HEADER */
     header {
-      position: relative;
-      background: #eee;
-      padding: 20px 0 15px 0;
-      text-align: center;
-    }
-
-    header h2 {
-      font-size: 22px;
-      color: #004d26;
-      font-weight: bold;
-      letter-spacing: 1px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: #004d26;
+      color: #fff;
     }
 
     .logo {
-      position: absolute;
-      left: 30px; /* 👈 đưa sang góc trái */
-      top: 15px;
-      font-size: 32px;
-      font-weight: bold;
-      color: #006633;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .logo h1 {
+      font-size: 22px;
+      letter-spacing: 1px;
+    }
+
+    .search {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .search input {
+      padding: 5px 8px;
+      border: none;
+      border-radius: 4px;
+      outline: none;
     }
 
     /* MENU */
     nav {
-      background: #004d26;
+      background: #2c2c2c;
     }
 
     .menu {
@@ -63,8 +81,8 @@
 
     .menu li a {
       display: block;
+      padding: 12px 20px;
       color: #fff;
-      padding: 12px 18px;
       text-decoration: none;
     }
 
@@ -77,11 +95,11 @@
       position: absolute;
       top: 100%;
       left: 0;
-      background: #00994d;
       list-style: none;
+      background: #444;
       display: none;
       min-width: 160px;
-      z-index: 100;
+      z-index: 10;
     }
 
     .submenu li a {
@@ -91,111 +109,118 @@
     }
 
     .submenu li a:hover {
-      background: #33cc7a;
+      background: #00994d;
     }
 
     .menu li:hover .submenu {
       display: block;
     }
 
-    /* BANNER */
-    .banner {
-      position: relative;
-      width: 100%;
-    }
-
-    .banner img {
-      width: 100%;
-      height: 400px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .banner-text {
-      position: absolute;
-      bottom: 40px;
-      right: 30px; /* 👈 chuyển sang góc phải */
-      background: rgba(0, 0, 0, 0.55);
-      color: #fff;
-      padding: 20px 25px;
-      border-radius: 6px;
-      max-width: 40%;
-      text-align: right; /* 👈 căn chữ sang phải */
-    }
-
-    .banner-text h2 {
-      font-size: 26px;
-      margin-bottom: 8px;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-
-    .banner-text p {
-      font-size: 15px;
-      line-height: 1.4;
-    }
-
     /* CONTENT */
-    .info {
+    main {
       display: flex;
-      justify-content: space-between;
-      padding: 30px;
+      padding: 20px;
       gap: 20px;
     }
 
-    .card {
-      background: #fafafa;
-      border: 1px solid #ddd;
-      width: 32%;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      overflow: hidden;
-      text-align: center;
+    /* LEFT COLUMN */
+    .left {
+      width: 25%;
     }
 
-    .card img {
+    .left h2 {
+      background: #004d26;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .left img {
       width: 100%;
       height: 180px;
       object-fit: cover;
-    }
-
-    .card-content {
-      padding: 15px;
-    }
-
-    .card-content h3 {
-      color: #006633;
       margin-bottom: 10px;
-      text-transform: uppercase;
     }
 
-    .card-content p {
+    .left ul {
+      list-style: none;
+      padding-left: 10px;
+    }
+
+    .left ul li {
+      padding: 6px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .left ul li a {
+      text-decoration: none;
+      color: #333;
+    }
+
+    .left ul li a:hover {
+      color: #00994d;
+    }
+
+    /* CENTER COLUMN */
+    .center {
+      width: 50%;
+    }
+
+    .center h2 {
+      font-size: 18px;
+      color: #004d26;
+      margin-bottom: 10px;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+
+    .item img {
+      width: 100px;
+      height: 70px;
+      object-fit: cover;
+    }
+
+    .item p {
       font-size: 14px;
       color: #333;
-      margin-bottom: 15px;
-      line-height: 1.4;
     }
 
-    .btn {
-      display: inline-block;
-      background: #006633;
+    /* RIGHT COLUMN */
+    .right {
+      width: 25%;
+    }
+
+    .right h2 {
+      background: #004d26;
       color: #fff;
-      padding: 8px 14px;
-      text-decoration: none;
-      border-radius: 4px;
-      font-size: 13px;
+      padding: 10px;
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 10px;
     }
 
-    .btn:hover {
-      background: #00994d;
+    .right img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+      margin-bottom: 10px;
     }
 
     /* FOOTER */
     footer {
-      background: #004d26;
+      background: #2c2c2c;
       color: #fff;
       text-align: center;
-      padding: 15px;
+      padding: 10px;
       font-size: 14px;
     }
   </style>
@@ -205,75 +230,76 @@
 
     <!-- HEADER -->
     <header>
-      <div class="logo">HTC</div> <!-- 👈 logo nằm bên trái -->
-      <h2>CÔNG TY TRÁCH NHIỆM HỮU HẠN HIỆP THÀNH</h2>
+      <div class="logo">
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330" alt="Logo">
+        <h1>NHÀ VIỆT XANH</h1>
+      </div>
+      <div class="search">
+        <input type="text" placeholder="Search...">
+      </div>
     </header>
 
-    <!-- MENU 2 CẤP -->
+    <!-- MENU -->
     <nav>
       <ul class="menu">
-        <li><a href="#">Giới thiệu</a></li>
-        <li><a href="#">Sản phẩm</a>
+        <li><a href="#">Trang chủ</a></li>
+        <li><a href="#">Biệt thự</a>
           <ul class="submenu">
-            <li><a href="#">Gạo nếp nương</a></li>
-            <li><a href="#">Gạo tấm ĐB</a></li>
-            <li><a href="#">Gạo Bắc hương</a></li>
-            <li><a href="#">Rau sạch Việt</a></li>
-            <li><a href="#">Gạo sàng củ</a></li>
+            <li><a href="#">Phòng ngủ</a></li>
+            <li><a href="#">Phòng khách</a></li>
+            <li><a href="#">Nhà tắm</a></li>
+            <li><a href="#">Cầu thang</a></li>
           </ul>
         </li>
-        <li><a href="#">Dịch vụ</a></li>
-        <li><a href="#">Dự án</a></li>
-        <li><a href="#">Tin tức - Sự kiện</a></li>
-        <li><a href="#">Album ảnh</a></li>
-        <li><a href="#">Tuyển dụng</a></li>
-        <li><a href="#">Liên hệ</a></li>
+        <li><a href="#">Nhà phố</a></li>
+        <li><a href="#">Nhà cấp 4</a></li>
+        <li><a href="#">Nhà vườn</a></li>
+        <li><a href="#">Nội thất</a></li>
       </ul>
     </nav>
 
     <!-- CONTENT -->
     <main>
-      <div class="banner">
-        <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6" alt="Banner">
-        <div class="banner-text">
-          <h2>NÔNG NGHIỆP BỀN VỮNG</h2>
-          <p>Hiệp Thành hướng đến phát triển nông nghiệp xanh, an toàn và thân thiện với môi trường, mang lại giá trị bền vững cho cộng đồng.</p>
+      <!-- LEFT -->
+      <div class="left">
+        <h2>MAU BIỆT THỰ</h2>
+        <img src="https://images.unsplash.com/photo-1560184897-91e1c56e4139" alt="Mẫu biệt thự">
+        <ul>
+          <li><a href="#">Phòng ngủ</a></li>
+          <li><a href="#">Phòng khách</a></li>
+          <li><a href="#">Nhà tắm</a></li>
+          <li><a href="#">Cầu thang</a></li>
+        </ul>
+      </div>
+
+      <!-- CENTER -->
+      <div class="center">
+        <h2>BTS mẫu thiết kế nhà 2 tầng 3 phòng ngủ</h2>
+        <div class="item">
+          <img src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae" alt="">
+          <p>BTS mẫu thiết kế nhà 2 tầng 3 phòng ngủ tiện nghi và hiện đại.</p>
+        </div>
+        <div class="item">
+          <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914" alt="">
+          <p>BTS mẫu thiết kế nhà 2 tầng 3 phòng ngủ phong cách châu Âu.</p>
+        </div>
+        <div class="item">
+          <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="">
+          <p>BTS mẫu thiết kế nhà 2 tầng 3 phòng ngủ không gian mở và thoáng mát.</p>
         </div>
       </div>
 
-      <section class="info">
-        <div class="card">
-          <img src="https://images.unsplash.com/photo-1504593811423-6dd665756598" alt="Giới thiệu chung">
-          <div class="card-content">
-            <h3>Giới thiệu chung</h3>
-            <p>Hiệp Thành hướng tới việc xây dựng thương hiệu nông sản Việt chất lượng cao, thân thiện với môi trường.</p>
-            <a href="#" class="btn">TÌM HIỂU THÊM</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <img src="https://images.unsplash.com/photo-1564518098559-7a0aa67b5f3a" alt="Dự án đầu tư">
-          <div class="card-content">
-            <h3>Dự án đầu tư</h3>
-            <p>Chúng tôi tập trung đầu tư vào nông sản sạch, hữu cơ và phát triển nông nghiệp bền vững cho tương lai.</p>
-            <a href="#" class="btn">TÌM HIỂU THÊM</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <img src="https://images.unsplash.com/photo-1606761568499-6b2b7e7a79e2" alt="Sản phẩm chính">
-          <div class="card-content">
-            <h3>Sản phẩm chính</h3>
-            <p>Các dòng gạo và rau sạch đạt tiêu chuẩn VietGAP, phục vụ nhu cầu trong nước và xuất khẩu quốc tế.</p>
-            <a href="#" class="btn">TÌM HIỂU THÊM</a>
-          </div>
-        </div>
-      </section>
+      <!-- RIGHT -->
+      <div class="right">
+        <h2>MAU NHÀ BẾP</h2>
+        <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f" alt="">
+        <img src="https://images.unsplash.com/photo-1560185008-5b987d2e5d6c" alt="">
+      </div>
     </main>
 
     <!-- FOOTER -->
     <footer>
-      <p>&copy; 2025 Hiệp Thành Company Limited - All rights reserved</p>
+      0833.000.355 | nhavietxanhcompany@gmail.com
     </footer>
 
   </div>
