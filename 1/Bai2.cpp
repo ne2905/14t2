@@ -1,97 +1,128 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<title>Tính lương nhân viên 2023</title>
-<style>
-    body { font-family: Arial; width: 420px; margin: 30px auto; }
-    h2 { text-align: center; }
-    table { border-collapse: collapse; width: 100%; }
-    td { border: 1px solid black; padding: 5px; }
-    input { width: 95%; padding: 5px; }
-    button { width: 90px; padding: 6px; margin: 5px; cursor: pointer; }
-    .btns { text-align: center; }
-</style>
-</head>
-<body>
-
-<h2>TÍNH LƯƠNG NHÂN VIÊN 2023</h2>
-<table>
-    <tr>
-        <td>Tên nhân viên</td>
-        <td><input id="ten"></td>
-    </tr>
-    <tr>
-        <td>Ngày công</td>
-        <td><input id="ngaycong" type="number"></td>
-    </tr>
-    <tr>
-        <td>Lương ngày</td>
-        <td><input id="luongngay" readonly></td>
-    </tr>
-    <tr>
-        <td>Lương tháng</td>
-        <td><input id="luongthang" readonly></td>
-    </tr>
-    <tr>
-        <td>Xếp loại nhân viên</td>
-        <td><input id="xeploai" readonly></td>
-    </tr>
-    <tr>
-        <td>Thưởng</td>
-        <td><input id="thuong" readonly></td>
-    </tr>
-    <tr>
-        <td>Thực lĩnh</td>
-        <td><input id="thuclinh" readonly></td>
-    </tr>
-</table>
-
-<div class="btns">
-    <button onclick="tinhLuong()">Tính tiền</button>
-    <button onclick="xoa()">Xóa</button>
-</div>
-
-<script>
-function tinhLuong() {
-    let ngayCong = parseInt(document.getElementById("ngaycong").value);
-
-    if (isNaN(ngayCong) || ngayCong <= 0) {
-        alert("Vui lòng nhập số ngày công hợp lệ!");
-        return;
-    }
-
-    // Mỗi ngày làm 8 tiếng, mỗi tiếng 20.000
-    let luongNgay = 8 * 20000;
-    let luongThang = ngayCong * luongNgay;
-    let thuong = 0;
-    let xepLoai = "";
-
-    if (ngayCong > 25) {
-        xepLoai = "A";
-        thuong = 500000;
-    } else if (ngayCong >= 20) {
-        xepLoai = "B";
-        thuong = 300000;
-    } else {
-        xepLoai = "C";
-        thuong = 0;
-    }
-
-    let thucLinh = luongThang + thuong;
-
-    // Gán kết quả vào các ô input
-    document.getElementById("luongngay").value = luongNgay.toLocaleString() + " đ";
-    document.getElementById("luongthang").value = luongThang.toLocaleString() + " đ";
-    document.getElementById("xeploai").value = xepLoai;
-    document.getElementById("thuong").value = thuong.toLocaleString() + " đ";
-    document.getElementById("thuclinh").value = thucLinh.toLocaleString() + " đ";
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f0f0f0;
 }
 
-function xoa() {
-    document.querySelectorAll("input").forEach(i => i.value = "");
+.container {
+    width: 90%;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 0 10px gray;
 }
-</script>
 
-</body>
-</html>
+/* HEADER */
+header {
+    display: flex;
+    align-items: center;
+    background: #ccc;
+    padding: 10px;
+}
+
+.logo {
+    width: 80px;
+    height: 80px;
+    margin-right: 15px;
+}
+
+.header-text h2, .header-text h3 {
+    margin: 0;
+}
+
+/* MENU */
+nav {
+    background: gray;
+}
+
+.menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.menu li {
+    position: relative;
+}
+
+.menu > li {
+    flex: 1;
+}
+
+.menu a {
+    display: block;
+    padding: 10px;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+}
+
+.menu a:hover {
+    background: darkgray;
+}
+
+/* Submenu */
+.submenu {
+    display: none;
+    position: absolute;
+    background: #ddd;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 150px;
+    z-index: 999;
+}
+
+.submenu li a {
+    color: black;
+    padding: 8px;
+    text-align: left;
+}
+
+.menu li:hover .submenu {
+    display: block;
+}
+
+/* MAIN CONTENT */
+main {
+    display: flex;
+    padding: 10px;
+    gap: 10px;
+}
+
+.left, .center, .right {
+    background: #f9f9f9;
+    padding: 10px;
+}
+
+.left {
+    width: 20%;
+}
+
+.center {
+    width: 60%;
+}
+
+.right {
+    width: 20%;
+}
+
+.student {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+}
+
+/* FOOTER */
+footer {
+    background: #ccc;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+}
