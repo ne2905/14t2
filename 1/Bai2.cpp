@@ -15,18 +15,50 @@ body {
 header {
     display: flex;
     align-items: center;
-    background: #ccc;
-    padding: 10px;
+    justify-content: space-between;
+    background: #dcdcdc;
+    padding: 10px 20px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .logo {
     width: 80px;
     height: 80px;
-    margin-right: 15px;
 }
 
-.header-text h2, .header-text h3 {
+.vnu-text h1 {
     margin: 0;
+    font-size: 40px;
+    font-weight: bold;
+    color: darkgreen;
+    line-height: 1;
+}
+
+.vnu-text p {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.header-center {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.header-center h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.header-center h3 {
+    margin: 0;
+    font-size: 18px;
 }
 
 /* MENU */
@@ -119,9 +151,42 @@ main {
     margin-right: 10px;
 }
 
+/* BOX BÊN PHẢI */
+.box {
+    background: #fff;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 8px;
+}
+
+.box h4 {
+    background: #ccc;
+    margin: -8px -8px 8px -8px;
+    padding: 6px;
+    text-align: center;
+}
+
+.box table {
+    width: 100%;
+}
+
+.box input {
+    width: 95%;
+    margin-bottom: 5px;
+}
+
+.box button {
+    width: 100%;
+    background: gray;
+    color: white;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+}
+
 /* FOOTER */
 footer {
-    background: #ccc;
+    background: #dcdcdc;
     text-align: center;
     padding: 10px;
     font-weight: bold;
