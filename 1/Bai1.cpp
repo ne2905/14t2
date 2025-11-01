@@ -1,281 +1,71 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HTC - Hiệp Thành Company</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background: #f6f6f6;
-    }
-
-    .container {
-      width: 90%;
-      margin: 0 auto;
-      background: #fff;
-    }
-
-    /* HEADER */
-    header {
-      position: relative;
-      background: #eee;
-      padding: 20px 0 15px 0;
-      text-align: center;
-    }
-
-    header h2 {
-      font-size: 22px;
-      color: #004d26;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-
-    .logo {
-      position: absolute;
-      right: 30px;
-      top: 15px;
-      font-size: 32px;
-      font-weight: bold;
-      color: #006633;
-    }
-
-    /* MENU */
-    nav {
-      background: #004d26;
-    }
-
-    .menu {
-      list-style: none;
-      display: flex;
-      justify-content: center;
-    }
-
-    .menu li {
-      position: relative;
-    }
-
-    .menu li a {
-      display: block;
-      color: #fff;
-      padding: 12px 18px;
-      text-decoration: none;
-    }
-
-    .menu li a:hover {
-      background: #00994d;
-    }
-
-    /* SUBMENU */
-    .submenu {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: #00994d;
-      list-style: none;
-      display: none;
-      min-width: 160px;
-      z-index: 100;
-    }
-
-    .submenu li a {
-      padding: 10px;
-      color: #fff;
-      display: block;
-    }
-
-    .submenu li a:hover {
-      background: #33cc7a;
-    }
-
-    .menu li:hover .submenu {
-      display: block;
-    }
-
-    /* BANNER */
-    .banner {
-      position: relative;
-      width: 100%;
-    }
-
-    .banner img {
-      width: 100%;
-      height: 400px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .banner-text {
-      position: absolute;
-      bottom: 40px;
-      left: 30px; /* 👈 sát trái hơn */
-      background: rgba(0, 0, 0, 0.55);
-      color: #fff;
-      padding: 20px 25px;
-      border-radius: 6px;
-      max-width: 40%;
-      text-align: left; /* 👈 căn trái chữ */
-    }
-
-    .banner-text h2 {
-      font-size: 26px;
-      margin-bottom: 8px;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-
-    .banner-text p {
-      font-size: 15px;
-      line-height: 1.4;
-    }
-
-    /* CONTENT */
-    .info {
-      display: flex;
-      justify-content: space-between;
-      padding: 30px;
-      gap: 20px;
-    }
-
-    .card {
-      background: #fafafa;
-      border: 1px solid #ddd;
-      width: 32%;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      overflow: hidden;
-      text-align: center;
-    }
-
-    .card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-
-    .card-content {
-      padding: 15px;
-    }
-
-    .card-content h3 {
-      color: #006633;
-      margin-bottom: 10px;
-      text-transform: uppercase;
-    }
-
-    .card-content p {
-      font-size: 14px;
-      color: #333;
-      margin-bottom: 15px;
-      line-height: 1.4;
-    }
-
-    .btn {
-      display: inline-block;
-      background: #006633;
-      color: #fff;
-      padding: 8px 14px;
-      text-decoration: none;
-      border-radius: 4px;
-      font-size: 13px;
-    }
-
-    .btn:hover {
-      background: #00994d;
-    }
-
-    /* FOOTER */
-    footer {
-      background: #004d26;
-      color: #fff;
-      text-align: center;
-      padding: 15px;
-      font-size: 14px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Tính lương nhân viên 2023</title>
+<style>
+    body { font-family: Arial; width: 400px; margin: 30px auto; }
+    h2 { text-align: center; }
+    table { border-collapse: collapse; width: 100%; }
+    td { border: 1px solid black; padding: 5px; }
+    input { width: 95%; padding: 4px; }
+    button { width: 80px; padding: 5px; margin: 5px; }
+    .btns { text-align: center; }
+</style>
 </head>
 <body>
-  <div class="container">
+    <h2>TÍNH LƯƠNG NHÂN VIÊN 2023</h2>
+    <table>
+        <tr><td>Tên nhân viên</td><td><input id="ten"></td></tr>
+        <tr><td>Ngày công</td><td><input id="ngaycong" type="number"></td></tr>
+        <tr><td>Lương ngày</td><td><input id="luongngay" readonly></td></tr>
+        <tr><td>Lương tháng</td><td><input id="luongthang" readonly></td></tr>
+        <tr><td>Xếp loại nhân viên</td><td><input id="xeploai" readonly></td></tr>
+        <tr><td>Thưởng</td><td><input id="thuong" readonly></td></tr>
+        <tr><td>Thực lĩnh</td><td><input id="thuclinh" readonly></td></tr>
+    </table>
 
-    <!-- HEADER -->
-    <header>
-      <h2>CÔNG TY TRÁCH NHIỆM HỮU HẠN HIỆP THÀNH</h2>
-      <div class="logo">HTC</div>
-    </header>
+    <div class="btns">
+        <button onclick="tinhLuong()">Tính tiền</button>
+        <button onclick="xoa()">Xóa</button>
+    </div>
 
-    <!-- MENU 2 CẤP -->
-    <nav>
-      <ul class="menu">
-        <li><a href="#">Giới thiệu</a></li>
-        <li><a href="#">Sản phẩm</a>
-          <ul class="submenu">
-            <li><a href="#">Gạo nếp nương</a></li>
-            <li><a href="#">Gạo tấm ĐB</a></li>
-            <li><a href="#">Gạo Bắc hương</a></li>
-            <li><a href="#">Rau sạch Việt</a></li>
-            <li><a href="#">Gạo sàng củ</a></li>
-          </ul>
-        </li>
-        <li><a href="#">Dịch vụ</a></li>
-        <li><a href="#">Dự án</a></li>
-        <li><a href="#">Tin tức - Sự kiện</a></li>
-        <li><a href="#">Album ảnh</a></li>
-        <li><a href="#">Tuyển dụng</a></li>
-        <li><a href="#">Liên hệ</a></li>
-      </ul>
-    </nav>
+<script>
+function tinhLuong() {
+    let ngaycong = parseInt(document.getElementById('ngaycong').value);
+    if (isNaN(ngaycong) || ngaycong <= 0) {
+        alert("Vui lòng nhập số ngày công hợp lệ!");
+        return;
+    }
 
-    <!-- CONTENT -->
-    <main>
-      <div class="banner">
-        <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6" alt="Banner">
-        <div class="banner-text">
-          <h2>NÔNG NGHIỆP BỀN VỮNG</h2>
-          <p>Hiệp Thành hướng đến phát triển nông nghiệp xanh, an toàn và thân thiện với môi trường, mang lại giá trị bền vững cho cộng đồng.</p>
-        </div>
-      </div>
+    let luongngay = 8 * 20000;
+    let luongthang = ngaycong * luongngay;
+    let thuong = 0;
+    let xeploai = "";
 
-      <section class="info">
-        <div class="card">
-          <img src="https://images.unsplash.com/photo-1504593811423-6dd665756598" alt="Giới thiệu chung">
-          <div class="card-content">
-            <h3>Giới thiệu chung</h3>
-            <p>Hiệp Thành hướng tới việc xây dựng thương hiệu nông sản Việt chất lượng cao, thân thiện với môi trường.</p>
-            <a href="#" class="btn">TÌM HIỂU THÊM</a>
-          </div>
-        </div>
+    if (ngaycong > 25) {
+        xeploai = "A";
+        thuong = 500000;
+    } else if (ngaycong >= 20) {
+        xeploai = "B";
+        thuong = 300000;
+    } else {
+        xeploai = "C";
+        thuong = 0;
+    }
 
-        <div class="card">
-          <img src="https://images.unsplash.com/photo-1564518098559-7a0aa67b5f3a" alt="Dự án đầu tư">
-          <div class="card-content">
-            <h3>Dự án đầu tư</h3>
-            <p>Chúng tôi tập trung đầu tư vào nông sản sạch, hữu cơ và phát triển nông nghiệp bền vững cho tương lai.</p>
-            <a href="#" class="btn">TÌM HIỂU THÊM</a>
-          </div>
-        </div>
+    let thuclinh = luongthang + thuong;
 
-        <div class="card">
-          <img src="https://images.unsplash.com/photo-1606761568499-6b2b7e7a79e2" alt="Sản phẩm chính">
-          <div class="card-content">
-            <h3>Sản phẩm chính</h3>
-            <p>Các dòng gạo và rau sạch đạt tiêu chuẩn VietGAP, phục vụ nhu cầu trong nước và xuất khẩu quốc tế.</p>
-            <a href="#" class="btn">TÌM HIỂU THÊM</a>
-          </div>
-        </div>
-      </section>
-    </main>
+    document.getElementById('luongngay').value = luongngay.toLocaleString();
+    document.getElementById('luongthang').value = luongthang.toLocaleString();
+    document.getElementById('xeploai').value = xeploai;
+    document.getElementById('thuong').value = thuong.toLocaleString();
+    document.getElementById('thuclinh').value = thuclinh.toLocaleString();
+}
 
-    <!-- FOOTER -->
-    <footer>
-      <p>&copy; 2025 Hiệp Thành Company Limited - All rights reserved</p>
-    </footer>
-
-  </div>
+function xoa() {
+    document.querySelectorAll("input").forEach(i => i.value = "");
+}
+</script>
 </body>
 </html>
