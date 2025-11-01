@@ -2,21 +2,28 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Thiết kế Web - Khoa CNTT</title>
+    <title>VNU - Khoa Công Nghệ Thông Tin</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
+
         <!-- HEADER -->
         <header>
-            <img src="logo.png" alt="Logo VNU" class="logo">
-            <div class="header-text">
+            <div class="header-left">
+                <img src="logo.png" alt="Logo VNU" class="logo">
+                <div class="vnu-text">
+                    <h1>VNU</h1>
+                    <p>Vietnam National University</p>
+                </div>
+            </div>
+            <div class="header-center">
                 <h2>TRƯỜNG ĐẠI HỌC QUỐC GIA HÀ NỘI</h2>
                 <h3>KHOA CÔNG NGHỆ THÔNG TIN</h3>
             </div>
         </header>
 
-        <!-- MENU -->
+        <!-- MENU NGANG -->
         <nav>
             <ul class="menu">
                 <li><a href="#">Trang chủ</a></li>
@@ -35,6 +42,7 @@
 
         <!-- CONTENT -->
         <main>
+            <!-- Cột trái -->
             <div class="left">
                 <h3>Danh sách các khoa</h3>
                 <ol>
@@ -45,6 +53,7 @@
                 </ol>
             </div>
 
+            <!-- Giữa -->
             <div class="center">
                 <div class="student">
                     <img src="avatar1.png" alt="Mẫu tin 1" class="avatar">
@@ -61,12 +70,51 @@
                 </div>
             </div>
 
+            <!-- Cột phải -->
             <div class="right">
-                <h3>Đăng ký / Đăng nhập</h3>
-                <p>IT Support<br>
-                Tổng cục VNU<br>
-                Yên sở Hoàng Mai<br>
-                Thanh toán</p>
+                <!-- Đăng ký / Đăng nhập -->
+                <div class="box">
+                    <h4>Đăng ký / Đăng nhập</h4>
+                </div>
+
+                <!-- Hỗ trợ sinh viên -->
+                <div class="box">
+                    <h4>Hỗ trợ sinh viên</h4>
+                    <table>
+                        <tr><td>Gọi ngay book tour hỗ trợ</td></tr>
+                        <tr><td><b>Hotline:</b> 0948844000</td></tr>
+                        <tr><td><b>MS:</b> 158708</td></tr>
+                        <tr><td><b>Ms. Hương</b></td></tr>
+                    </table>
+                </div>
+
+                <!-- IT Support -->
+                <div class="box">
+                    <h4>IT Support</h4>
+                    <table>
+                        <tr><td>Tổng cục VNU</td></tr>
+                        <tr><td>Yên sở Hoàng Mai</td></tr>
+                        <tr><td>Thanh toán</td></tr>
+                    </table>
+                </div>
+
+                <!-- Tìm kiếm -->
+                <div class="box">
+                    <h4>TÌM KIẾM</h4>
+                    <form>
+                        <table>
+                            <tr><td>Họ tên:</td></tr>
+                            <tr><td><input type="text"></td></tr>
+                            <tr><td>Mã SV:</td></tr>
+                            <tr><td><input type="text"></td></tr>
+                            <tr><td>Giới tính:</td></tr>
+                            <tr><td><input type="text"></td></tr>
+                            <tr><td>Địa chỉ:</td></tr>
+                            <tr><td><input type="text"></td></tr>
+                            <tr><td><button>Tìm kiếm</button></td></tr>
+                        </table>
+                    </form>
+                </div>
             </div>
         </main>
 
@@ -74,6 +122,7 @@
         <footer>
             <p>Bản quyền khoa CNTT - Đại học Quốc gia Hà Nội</p>
         </footer>
+
     </div>
 </body>
 </html>
