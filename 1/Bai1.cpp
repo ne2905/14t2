@@ -1,49 +1,86 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<title>Trang Web</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div id="layout">
-<header>
-  <div id="header-logo">
-    <img src="logo1.png" alt="logo1">
-    <h2>SIÊU THỊ DÀNH CHO NGƯỜI TIÊU DÙNG THÔNG THÁI</h2>
-    <img src="logo2.png" alt="logo2">
-  </div>
-</header>
-<div id="sidebar1">Sidebar 1</div>
-<div id="content">
-  <div id="menu">
-    <a href="#">Trang chủ</a>
-    <div class="menu-item">
-      <a href="#">Sản phẩm mới</a>
-      <div class="submenu">
-        <a href="#">Menu cấp 2</a>
-      </div>
-    </div>
-    <a href="#">Hỗ trợ khách hàng</a>
-    <a href="#">Đồ gia dụng</a>
-    <a href="#">Đồ trẻ em</a>
-  </div>
+class Node:
+    def __init__(self, key):
+        self.key = key
+        self.left = None
+        self.right = None
 
-  <h3>Form tính biểu thức</h3>
-  <form>
-    <label>Nhập số n:</label>
-    <input id="n" type="number" min="1" required>
-    <label>Kết quả biểu thức:</label>
-    <input id="result" type="text" readonly>
-    <button type="button" onclick="calc()">Tính</button>
-  </form>
-</div>
-<div id="sidebar2">Sidebar 2</div>
-<footer>
-  Copy right 2020 by TranAnh Company <br> Liên hệ: 0999988888
-</footer>
-</div>
-<script src="script.js"></script>
-</body>
-</html>
-    
+# Chèn vào BST
+def insert(root, x):
+    if root is None:
+        return Node(x)
+    if x < root.key:
+        root.left = insert(root.left, x)
+    elif x > root.key:
+        root.right = insert(root.right, x)
+    return root
+
+# Duyệt tiền tự
+def preorder(root):
+    if root:
+        print(root.key, end=" ")
+        preorder(root.left)
+        preorder(root.right)
+
+# Tìm nút nhỏ nhất
+def find_min(root):
+    while root.left:
+        root = root.left
+    return root
+
+# Xóa nút
+def delete_node(root, k):
+    if root is None:
+        return root
+
+    if k < root.key:
+        root.left = delete_node(root.left, k)
+    elif k > root.key:
+        root.right = delete_node(root.right, k)
+    else:
+        # 0 hoặc 1 con
+        if root.left is None:
+            return root.right
+        elif root.right is None:
+            return root.left
+        # 2 con
+        temp = find_min(root.right)
+        root.key = temp.key
+        root.right = delete_node(root.right, temp.key)
+    return root
+
+# Tìm kiếm
+def search(root, k):
+    if root is None:
+        return False
+    if root.key == k:
+        return True
+    if k < root.key:
+        return search(root.left, k)
+    return search(root.right, k)
+
+# Main
+arr = [15, 7, 24, 2, 10, 20, 34, 9, 12, 55]
+root = None
+
+for x in arr:
+    root = insert(root, x)
+
+print("Preorder ban dau:", end=" ")
+preorder(root)
+print()
+
+# Thêm 28
+root = insert(root, 28)
+print("Preorder sau khi them 28:", end=" ")
+preorder(root)
+print()
+
+# Nhập K
+K = int(input("Nhap K can xoa: "))
+
+if search(root, K):
+    root = delete_node(root, K)
+    print("Cay sau khi xoa", K, ":", end=" ")
+    preorder(root)
+else:
+    print("Khong tim thay", K)
