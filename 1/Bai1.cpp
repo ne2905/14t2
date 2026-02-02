@@ -1,86 +1,128 @@
-class Node:
-    def __init__(self, key):
-        self.key = key
-        self.left = None
-        self.right = None
+#include <iostream>
+#include <string>
+using namespace std;
 
-# Chèn vào BST
-def insert(root, x):
-    if root is None:
-        return Node(x)
-    if x < root.key:
-        root.left = insert(root.left, x)
-    elif x > root.key:
-        root.right = insert(root.right, x)
-    return root
+/* Cấu trúc sinh viên */
+struct SinhVien {
+    string maSV;
+    string hoDem;
+    string ten;
+    string gioiTinh;
+    int namSinh;
+    float diemTK;
+};
 
-# Duyệt tiền tự
-def preorder(root):
-    if root:
-        print(root.key, end=" ")
-        preorder(root.left)
-        preorder(root.right)
+/* Node của danh sách liên kết */
+struct Node {
+    SinhVien data;
+    Node* next;
+};
 
-# Tìm nút nhỏ nhất
-def find_min(root):
-    while root.left:
-        root = root.left
-    return root
+/* Danh sách liên kết */
+struct DanhSach {
+    Node* head;
+};
 
-# Xóa nút
-def delete_node(root, k):
-    if root is None:
-        return root
+/* Khởi tạo danh sách */
+void khoiTao(DanhSach& ds) {
+    ds.head = nullptr;
+}
 
-    if k < root.key:
-        root.left = delete_node(root.left, k)
-    elif k > root.key:
-        root.right = delete_node(root.right, k)
-    else:
-        # 0 hoặc 1 con
-        if root.left is None:
-            return root.right
-        elif root.right is None:
-            return root.left
-        # 2 con
-        temp = find_min(root.right)
-        root.key = temp.key
-        root.right = delete_node(root.right, temp.key)
-    return root
+/* Tạo node mới */
+Node* taoNode(SinhVien sv) {
+    Node* p = new Node;
+    p->data = sv;
+    p->next = nullptr;
+    return p;
+}
 
-# Tìm kiếm
-def search(root, k):
-    if root is None:
-        return False
-    if root.key == k:
-        return True
-    if k < root.key:
-        return search(root.left, k)
-    return search(root.right, k)
+/* Thêm sinh viên vào cuối danh sách */
+void themCuoi(DanhSach& ds, SinhVien sv) {
+    Node* p = taoNode(sv);
+    if (ds.head == nullptr) {
+        ds.head = p;
+        return;
+    }
+    Node* q = ds.head;
+    while (q->next != nullptr) {
+        q = q->next;
+    }
+    q->next = p;
+}
 
-# Main
-arr = [15, 7, 24, 2, 10, 20, 34, 9, 12, 55]
-root = None
+/* Xóa phần tử đầu tiên */
+void xoaDau(DanhSach& ds) {
+    if (ds.head == nullptr) return;
+    Node* p = ds.head;
+    ds.head = ds.head->next;
+    delete p;
+}
 
-for x in arr:
-    root = insert(root, x)
+/* Chèn sinh viên vào vị trí pos (bắt đầu từ 1) */
+void chenViTri(DanhSach& ds, SinhVien sv, int pos) {
+    Node* p = taoNode(sv);
+    if (pos == 1) {
+        p->next = ds.head;
+        ds.head = p;
+        return;
+    }
+    Node* q = ds.head;
+    for (int i = 1; i < pos - 1 && q != nullptr; i++) {
+        q = q->next;
+    }
+    if (q == nullptr) return;
+    p->next = q->next;
+    q->next = p;
+}
 
-print("Preorder ban dau:", end=" ")
-preorder(root)
-print()
+/* Sắp xếp danh sách theo tên tăng dần (Selection Sort) */
+void sapXepTheoTen(DanhSach& ds) {
+    for (Node* p = ds.head; p != nullptr; p = p->next) {
+        Node* minNode = p;
+        for (Node* q = p->next; q != nullptr; q = q->next) {
+            if (q->data.ten < minNode->data.ten) {
+                minNode = q;
+            }
+        }
+        if (minNode != p) {
+            SinhVien temp = p->data;
+            p->data = minNode->data;
+            minNode->data = temp;
+        }
+    }
+}
 
-# Thêm 28
-root = insert(root, 28)
-print("Preorder sau khi them 28:", end=" ")
-preorder(root)
-print()
+/* Hiển thị danh sách sinh viên */
+void hienThi(DanhSach ds) {
+    Node* p = ds.head;
+    while (p != nullptr) {
+        cout << p->data.maSV << " | "
+             << p->data.hoDem << " "
+             << p->data.ten << " | "
+             << p->data.gioiTinh << " | "
+             << p->data.namSinh << " | "
+             << p->data.diemTK << endl;
+        p = p->next;
+    }
+}
 
-# Nhập K
-K = int(input("Nhap K can xoa: "))
+int main() {
+    DanhSach ds;
+    khoiTao(ds);
 
-if search(root, K):
-    root = delete_node(root, K)
-    print("Cay sau khi xoa", K, ":", end=" ")
-    preorder(root)
-else:
-    print("Khong tim thay", K)
+    themCuoi(ds, {"SV1001", "Tran Van", "Thanh", "Nam", 1999, 7.5});
+    themCuoi(ds, {"SV1002", "Nguyen Thi", "Huong", "Nu", 2000, 7.3});
+    themCuoi(ds, {"SV1003", "Nguyen Van", "Binh", "Nam", 1998, 6.4});
+    themCuoi(ds, {"SV1004", "Bui Thi", "Hong", "Nu", 2000, 5.8});
+    themCuoi(ds, {"SV1005", "Duong Van", "Giang", "Nam", 1998, 8.3});
+
+    xoaDau(ds);
+
+    chenViTri(ds, {"SV1006", "Le Thi", "Doan", "Nu", 1998, 7.6}, 3);
+
+    sapXepTheoTen(ds);
+
+    hienThi(ds);
+
+    return 0;
+}
