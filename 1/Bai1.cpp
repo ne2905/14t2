@@ -1,158 +1,165 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 //1. Doctor: lớp cơ sở
-class Doctor {
-protected:
-    string id, fullName, gender, specialty, mobile;
-    int experience;
+class Doctor
+{
+    protected string id, fullName, gender, specialty, mobile;
+    protected int experience;
 
-public:
-    Doctor() {}
-
-    string getID() {
+    public string GetID()
+    {
         return id;
     }
 
-    int getExperience() {
+    public int GetExperience()
+    {
         return experience;
     }
 
-    virtual void input() {
-        cout << "Nhap ID: ";
-        cin >> id;
-        cin.ignore();
+    public virtual void Input()
+    {
+        Console.Write("Nhap ID: ");
+        id = Console.ReadLine();
 
-        cout << "Nhap ho ten: ";
-        getline(cin, fullName);
+        Console.Write("Nhap ho ten: ");
+        fullName = Console.ReadLine();
 
-        cout << "Nhap gioi tinh: ";
-        getline(cin, gender);
+        Console.Write("Nhap gioi tinh: ");
+        gender = Console.ReadLine();
 
-        cout << "Nhap chuyen khoa: ";
-        getline(cin, specialty);
+        Console.Write("Nhap chuyen khoa: ");
+        specialty = Console.ReadLine();
 
-        cout << "Nhap so nam kinh nghiem: ";
-        cin >> experience;
-        cin.ignore();
+        Console.Write("Nhap so nam kinh nghiem: ");
+        experience = int.Parse(Console.ReadLine());
 
-        cout << "Nhap so dien thoai: ";
-        getline(cin, mobile);
+        Console.Write("Nhap so dien thoai: ");
+        mobile = Console.ReadLine();
     }
 
-    virtual void output() {
-        cout << id << "\t"
-             << fullName << "\t"
-             << gender << "\t"
-             << specialty << "\t"
-             << experience << "\t"
-             << mobile;
-    }
-};
-
-//2. GeneralPractitioner: kế thừa từ Doctor
-class GeneralPractitioner : public Doctor {
-private:
-    string workingHours;
-
-public:
-    void input() override {
-        Doctor::input();
-        cout << "Nhap gio lam viec: ";
-        getline(cin, workingHours);
-    }
-
-    void output() override {
-        Doctor::output();
-        cout << "\t" << workingHours << endl;
-    }
-};
-
-//3. Kiểm tra trùng ID
-bool isDuplicate(vector<GeneralPractitioner> &ds, string id) {
-    for (auto &x : ds) {
-        if (x.getID() == id)
-            return true;
-    }
-    return false;
-}
-
-//4. Thêm bác sĩ
-void add(vector<GeneralPractitioner> &ds) {
-    GeneralPractitioner gp;
-    gp.input();
-
-    if (isDuplicate(ds, gp.getID())) {
-        cout << "ID bi trung! Khong them duoc.\n";
-        return;
-    }
-
-    ds.push_back(gp);
-    cout << "Them thanh cong!\n";
-}
-
-//5. Hiển thị danh sách
-void display(vector<GeneralPractitioner> ds) {
-    if (ds.empty()) {
-        cout << "Danh sach rong!\n";
-        return;
-    }
-
-    cout << "ID\tTen\tGioiTinh\tChuyenKhoa\tKinhNghiem\tSDT\tGioLam\n";
-
-    for (auto &x : ds) {
-        x.output();
+    public virtual void Output()
+    {
+        Console.Write(id + "\t" +
+                      fullName + "\t" +
+                      gender + "\t" +
+                      specialty + "\t" +
+                      experience + "\t" +
+                      mobile);
     }
 }
 
-//6. Sắp xếp theo kinh nghiệm giảm dần
-void sortList(vector<GeneralPractitioner> &ds) {
-    sort(ds.begin(), ds.end(), [](GeneralPractitioner a, GeneralPractitioner b) {
-        return a.getExperience() > b.getExperience();
-    });
+//2. GeneralPractitioner: kế thừa Doctor
+class GeneralPractitioner : Doctor
+{
+    private string workingHours;
 
-    cout << "Da sap xep!\n";
+    public override void Input()
+    {
+        base.Input();
+        Console.Write("Nhap gio lam viec: ");
+        workingHours = Console.ReadLine();
+    }
+
+    public override void Output()
+    {
+        base.Output();
+        Console.WriteLine("\t" + workingHours);
+    }
 }
 
-//7. Menu chương trình
-void menu() {
-    vector<GeneralPractitioner> ds;
-    int choice;
+//3. Program: chương trình chính
+class Program
+{
+    static List<GeneralPractitioner> ds = new List<GeneralPractitioner>();
 
-    do {
-        cout << "\n===== MENU =====\n";
-        cout << "1. Them\n";
-        cout << "2. Hien thi danh sach\n";
-        cout << "3. Sap xep theo kinh nghiem\n";
-        cout << "0. Thoat\n";
-        cout << "Chon: ";
-        cin >> choice;
+    // kiểm tra trùng ID
+    static bool IsDuplicate(string id)
+    {
+        foreach (var x in ds)
+        {
+            if (x.GetID() == id)
+                return true;
+        }
+        return false;
+    }
 
-        switch (choice) {
-        case 1:
-            add(ds);
-            break;
-        case 2:
-            display(ds);
-            break;
-        case 3:
-            sortList(ds);
-            display(ds);
-            break;
-        case 0:
-            cout << "Thoat chuong trinh!\n";
-            break;
-        default:
-            cout << "Lua chon khong hop le!\n";
+    // thêm
+    static void Add()
+    {
+        GeneralPractitioner gp = new GeneralPractitioner();
+        gp.Input();
+
+        if (IsDuplicate(gp.GetID()))
+        {
+            Console.WriteLine("ID bi trung! Khong them duoc.");
+            return;
         }
 
-    } while (choice != 0);
-}
+        ds.Add(gp);
+        Console.WriteLine("Them thanh cong!");
+    }
 
-//8. Main
-int main() {
-    menu();
-    return 0;
+    // hiển thị
+    static void Display()
+    {
+        if (ds.Count == 0)
+        {
+            Console.WriteLine("Danh sach rong!");
+            return;
+        }
+
+        Console.WriteLine("ID\tTen\tGioiTinh\tChuyenKhoa\tKinhNghiem\tSDT\tGioLam");
+
+        foreach (var x in ds)
+        {
+            x.Output();
+        }
+    }
+
+    // sắp xếp giảm dần theo experience
+    static void SortList()
+    {
+        ds = ds.OrderByDescending(x => x.GetExperience()).ToList();
+        Console.WriteLine("Da sap xep!");
+    }
+
+    static void Main(string[] args)
+    {
+        int choice;
+
+        do
+        {
+            Console.WriteLine("\n===== MENU =====");
+            Console.WriteLine("1. Them");
+            Console.WriteLine("2. Hien thi danh sach");
+            Console.WriteLine("3. Sap xep theo kinh nghiem");
+            Console.WriteLine("0. Thoat");
+            Console.Write("Chon: ");
+
+            choice = int.Parse(Console.ReadLine());
+
+            switch (choice)
+            {
+                case 1:
+                    Add();
+                    break;
+                case 2:
+                    Display();
+                    break;
+                case 3:
+                    SortList();
+                    Display();
+                    break;
+                case 0:
+                    Console.WriteLine("Thoat chuong trinh!");
+                    break;
+                default:
+                    Console.WriteLine("Lua chon khong hop le!");
+                    break;
+            }
+
+        } while (choice != 0);
+    }
 } 
