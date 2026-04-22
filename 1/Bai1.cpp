@@ -1,128 +1,158 @@
 #include <iostream>
-#include <string>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
-/* Cấu trúc sinh viên */
-struct SinhVien {
-    string maSV;
-    string hoDem;
-    string ten;
-    string gioiTinh;
-    int namSinh;
-    float diemTK;
+//1. Doctor: lớp cơ sở
+class Doctor {
+protected:
+    string id, fullName, gender, specialty, mobile;
+    int experience;
+
+public:
+    Doctor() {}
+
+    string getID() {
+        return id;
+    }
+
+    int getExperience() {
+        return experience;
+    }
+
+    virtual void input() {
+        cout << "Nhap ID: ";
+        cin >> id;
+        cin.ignore();
+
+        cout << "Nhap ho ten: ";
+        getline(cin, fullName);
+
+        cout << "Nhap gioi tinh: ";
+        getline(cin, gender);
+
+        cout << "Nhap chuyen khoa: ";
+        getline(cin, specialty);
+
+        cout << "Nhap so nam kinh nghiem: ";
+        cin >> experience;
+        cin.ignore();
+
+        cout << "Nhap so dien thoai: ";
+        getline(cin, mobile);
+    }
+
+    virtual void output() {
+        cout << id << "\t"
+             << fullName << "\t"
+             << gender << "\t"
+             << specialty << "\t"
+             << experience << "\t"
+             << mobile;
+    }
 };
 
-/* Node của danh sách liên kết */
-struct Node {
-    SinhVien data;
-    Node* next;
+//2. GeneralPractitioner: kế thừa từ Doctor
+class GeneralPractitioner : public Doctor {
+private:
+    string workingHours;
+
+public:
+    void input() override {
+        Doctor::input();
+        cout << "Nhap gio lam viec: ";
+        getline(cin, workingHours);
+    }
+
+    void output() override {
+        Doctor::output();
+        cout << "\t" << workingHours << endl;
+    }
 };
 
-/* Danh sách liên kết */
-struct DanhSach {
-    Node* head;
-};
-
-/* Khởi tạo danh sách */
-void khoiTao(DanhSach& ds) {
-    ds.head = nullptr;
+//3. Kiểm tra trùng ID
+bool isDuplicate(vector<GeneralPractitioner> &ds, string id) {
+    for (auto &x : ds) {
+        if (x.getID() == id)
+            return true;
+    }
+    return false;
 }
 
-/* Tạo node mới */
-Node* taoNode(SinhVien sv) {
-    Node* p = new Node;
-    p->data = sv;
-    p->next = nullptr;
-    return p;
-}
+//4. Thêm bác sĩ
+void add(vector<GeneralPractitioner> &ds) {
+    GeneralPractitioner gp;
+    gp.input();
 
-/* Thêm sinh viên vào cuối danh sách */
-void themCuoi(DanhSach& ds, SinhVien sv) {
-    Node* p = taoNode(sv);
-    if (ds.head == nullptr) {
-        ds.head = p;
+    if (isDuplicate(ds, gp.getID())) {
+        cout << "ID bi trung! Khong them duoc.\n";
         return;
     }
-    Node* q = ds.head;
-    while (q->next != nullptr) {
-        q = q->next;
-    }
-    q->next = p;
+
+    ds.push_back(gp);
+    cout << "Them thanh cong!\n";
 }
 
-/* Xóa phần tử đầu tiên */
-void xoaDau(DanhSach& ds) {
-    if (ds.head == nullptr) return;
-    Node* p = ds.head;
-    ds.head = ds.head->next;
-    delete p;
-}
-
-/* Chèn sinh viên vào vị trí pos (bắt đầu từ 1) */
-void chenViTri(DanhSach& ds, SinhVien sv, int pos) {
-    Node* p = taoNode(sv);
-    if (pos == 1) {
-        p->next = ds.head;
-        ds.head = p;
+//5. Hiển thị danh sách
+void display(vector<GeneralPractitioner> ds) {
+    if (ds.empty()) {
+        cout << "Danh sach rong!\n";
         return;
     }
-    Node* q = ds.head;
-    for (int i = 1; i < pos - 1 && q != nullptr; i++) {
-        q = q->next;
+
+    cout << "ID\tTen\tGioiTinh\tChuyenKhoa\tKinhNghiem\tSDT\tGioLam\n";
+
+    for (auto &x : ds) {
+        x.output();
     }
-    if (q == nullptr) return;
-    p->next = q->next;
-    q->next = p;
 }
 
-/* Sắp xếp danh sách theo tên tăng dần (Selection Sort) */
-void sapXepTheoTen(DanhSach& ds) {
-    for (Node* p = ds.head; p != nullptr; p = p->next) {
-        Node* minNode = p;
-        for (Node* q = p->next; q != nullptr; q = q->next) {
-            if (q->data.ten < minNode->data.ten) {
-                minNode = q;
-            }
+//6. Sắp xếp theo kinh nghiệm giảm dần
+void sortList(vector<GeneralPractitioner> &ds) {
+    sort(ds.begin(), ds.end(), [](GeneralPractitioner a, GeneralPractitioner b) {
+        return a.getExperience() > b.getExperience();
+    });
+
+    cout << "Da sap xep!\n";
+}
+
+//7. Menu chương trình
+void menu() {
+    vector<GeneralPractitioner> ds;
+    int choice;
+
+    do {
+        cout << "\n===== MENU =====\n";
+        cout << "1. Them\n";
+        cout << "2. Hien thi danh sach\n";
+        cout << "3. Sap xep theo kinh nghiem\n";
+        cout << "0. Thoat\n";
+        cout << "Chon: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            add(ds);
+            break;
+        case 2:
+            display(ds);
+            break;
+        case 3:
+            sortList(ds);
+            display(ds);
+            break;
+        case 0:
+            cout << "Thoat chuong trinh!\n";
+            break;
+        default:
+            cout << "Lua chon khong hop le!\n";
         }
-        if (minNode != p) {
-            SinhVien temp = p->data;
-            p->data = minNode->data;
-            minNode->data = temp;
-        }
-    }
+
+    } while (choice != 0);
 }
 
-/* Hiển thị danh sách sinh viên */
-void hienThi(DanhSach ds) {
-    Node* p = ds.head;
-    while (p != nullptr) {
-        cout << p->data.maSV << " | "
-             << p->data.hoDem << " "
-             << p->data.ten << " | "
-             << p->data.gioiTinh << " | "
-             << p->data.namSinh << " | "
-             << p->data.diemTK << endl;
-        p = p->next;
-    }
-}
-
+//8. Main
 int main() {
-    DanhSach ds;
-    khoiTao(ds);
-
-    themCuoi(ds, {"SV1001", "Tran Van", "Thanh", "Nam", 1999, 7.5});
-    themCuoi(ds, {"SV1002", "Nguyen Thi", "Huong", "Nu", 2000, 7.3});
-    themCuoi(ds, {"SV1003", "Nguyen Van", "Binh", "Nam", 1998, 6.4});
-    themCuoi(ds, {"SV1004", "Bui Thi", "Hong", "Nu", 2000, 5.8});
-    themCuoi(ds, {"SV1005", "Duong Van", "Giang", "Nam", 1998, 8.3});
-
-    xoaDau(ds);
-
-    chenViTri(ds, {"SV1006", "Le Thi", "Doan", "Nu", 1998, 7.6}, 3);
-
-    sapXepTheoTen(ds);
-
-    hienThi(ds);
-
+    menu();
     return 0;
-}
+} 
