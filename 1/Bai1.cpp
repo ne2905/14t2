@@ -1,165 +1,59 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+<Window x:Class="WpfApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2000/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2000/xaml"
+        Title="Quản Lý Dữ Liệu" Height="450" Width="700" WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="3"/>
+            <Setter Property="Height" Value="25"/>
+        </Style>
+    </Window.Resources>
 
-//1. Doctor: lớp cơ sở
-class Doctor
-{
-    protected string id, fullName, gender, specialty, mobile;
-    protected int experience;
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="*"/>    </Grid.RowDefinitions>
 
-    public string GetID()
-    {
-        return id;
-    }
+        <GroupBox Header="Thông tin nhập liệu" Grid.Row0 Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-    public int GetExperience()
-    {
-        return experience;
-    }
+                <Label Content="Mã sản phẩm:" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtMa" Grid.Column="1"/>
 
-    public virtual void Input()
-    {
-        Console.Write("Nhap ID: ");
-        id = Console.ReadLine();
+                <Label Content="Tên sản phẩm:" Grid.Column="2" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtTen" Grid.Column="3"/>
+            </Grid>
+        </GroupBox>
 
-        Console.Write("Nhap ho ten: ");
-        fullName = Console.ReadLine();
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
+            <Button x:Name="btnThem" Content="Thêm mới" Click="btnThem_Click"/>
+            <Button x:Name="btnTruyenData" Content="Xem Chi Tiết (Sang Window khác)" Click="btnTruyenData_Click"/>
+        </StackPanel>
 
-        Console.Write("Nhap gioi tinh: ");
-        gender = Console.ReadLine();
-
-        Console.Write("Nhap chuyen khoa: ");
-        specialty = Console.ReadLine();
-
-        Console.Write("Nhap so nam kinh nghiem: ");
-        experience = int.Parse(Console.ReadLine());
-
-        Console.Write("Nhap so dien thoai: ");
-        mobile = Console.ReadLine();
-    }
-
-    public virtual void Output()
-    {
-        Console.Write(id + "\t" +
-                      fullName + "\t" +
-                      gender + "\t" +
-                      specialty + "\t" +
-                      experience + "\t" +
-                      mobile);
-    }
-}
-
-//2. GeneralPractitioner: kế thừa Doctor
-class GeneralPractitioner : Doctor
-{
-    private string workingHours;
-
-    public override void Input()
-    {
-        base.Input();
-        Console.Write("Nhap gio lam viec: ");
-        workingHours = Console.ReadLine();
-    }
-
-    public override void Output()
-    {
-        base.Output();
-        Console.WriteLine("\t" + workingHours);
-    }
-}
-
-//3. Program: chương trình chính
-class Program
-{
-    static List<GeneralPractitioner> ds = new List<GeneralPractitioner>();
-
-    // kiểm tra trùng ID
-    static bool IsDuplicate(string id)
-    {
-        foreach (var x in ds)
-        {
-            if (x.GetID() == id)
-                return true;
-        }
-        return false;
-    }
-
-    // thêm
-    static void Add()
-    {
-        GeneralPractitioner gp = new GeneralPractitioner();
-        gp.Input();
-
-        if (IsDuplicate(gp.GetID()))
-        {
-            Console.WriteLine("ID bi trung! Khong them duoc.");
-            return;
-        }
-
-        ds.Add(gp);
-        Console.WriteLine("Them thanh cong!");
-    }
-
-    // hiển thị
-    static void Display()
-    {
-        if (ds.Count == 0)
-        {
-            Console.WriteLine("Danh sach rong!");
-            return;
-        }
-
-        Console.WriteLine("ID\tTen\tGioiTinh\tChuyenKhoa\tKinhNghiem\tSDT\tGioLam");
-
-        foreach (var x in ds)
-        {
-            x.Output();
-        }
-    }
-
-    // sắp xếp giảm dần theo experience
-    static void SortList()
-    {
-        ds = ds.OrderByDescending(x => x.GetExperience()).ToList();
-        Console.WriteLine("Da sap xep!");
-    }
-
-    static void Main(string[] args)
-    {
-        int choice;
-
-        do
-        {
-            Console.WriteLine("\n===== MENU =====");
-            Console.WriteLine("1. Them");
-            Console.WriteLine("2. Hien thi danh sach");
-            Console.WriteLine("3. Sap xep theo kinh nghiem");
-            Console.WriteLine("0. Thoat");
-            Console.Write("Chon: ");
-
-            choice = int.Parse(Console.ReadLine());
-
-            switch (choice)
-            {
-                case 1:
-                    Add();
-                    break;
-                case 2:
-                    Display();
-                    break;
-                case 3:
-                    SortList();
-                    Display();
-                    break;
-                case 0:
-                    Console.WriteLine("Thoat chuong trinh!");
-                    break;
-                default:
-                    Console.WriteLine("Lua chon khong hop le!");
-                    break;
-            }
-
-        } while (choice != 0);
-    }
-} 
+        <DataGrid x:Name="dgDanhSach" Grid.Row="2" AutoGenerateColumns="False" 
+                  IsReadOnly="True" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Mã SP" Binding="{Binding Ma}" Width="1*"/>
+                <DataGridTextColumn Header="Tên Sản Phẩm" Binding="{Binding Ten}" Width="2*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
