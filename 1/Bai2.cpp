@@ -1,103 +1,116 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
+#include <iostream>
+#include <string>
+using namespace std;
 
-namespace WpfApp_QuanLyBacSi
+struct Quat
 {
-    // Lớp đối tượng dữ liệu BacSi
-    public class BacSi
+    string ten;
+    string mau;
+    int gia;
+};
+
+// ================= KHỞI TẠO =================
+
+void KhoiTao(Quat d[], int& n, int& p)
+{
+    p = 1000000;
+    n = 8;
+
+    d[0] = {"Panasonic", "Xanh", 250000};
+    d[1] = {"Senko", "Do", 180000};
+    d[2] = {"Asia", "Trang", 300000};
+    d[3] = {"Mitsubishi", "Den", 450000};
+    d[4] = {"Sharp", "Xam", 350000};
+    d[5] = {"KDK", "Xanh", 500000};
+    d[6] = {"Toshiba", "Trang", 400000};
+    d[7] = {"Hatari", "Den", 280000};
+}
+
+// ================= SẮP XẾP =================
+
+// Sắp xếp giá giảm dần
+void SapXep(Quat d[], int n)
+{
+    for (int i = 0; i < n - 1; i++)
     {
-        public string MaBS { get; set; }
-        public string HoTen { get; set; }
-        public int SoNgayTruc { get; set; }
-        public double BacLuong { get; set; }
-        public string Khoa { get; set; }
-    }
-
-    public partial class MainWindow : Window
-    {
-        // Danh sách lưu trữ dữ liệu gốc
-        List<BacSi> danhSachBacSi = new List<BacSi>();
-
-        public MainWindow()
+        for (int j = i + 1; j < n; j++)
         {
-            InitializeComponent();
-        }
-
-        // Câu 2a & Câu 3: Thêm dữ liệu và bẫy 3 lỗi ngoại lệ
-        private void btnThem_Click(object sender, RoutedEventArgs e)
-        {
-            try
+            if (d[i].gia < d[j].gia)
             {
-                // [YÊU CẦU 1]: Kiểm tra dữ liệu rỗng
-                if (string.IsNullOrWhiteSpace(txtMa.Text) || string.IsNullOrWhiteSpace(txtHoTen.Text))
-                {
-                    throw new Exception("Lỗi: Mã bác sĩ và Họ tên không được để trống!");
-                }
-
-                // [YÊU CẦU 2]: Kiểm tra định dạng số nguyên không âm cho Số ngày trực
-                if (!int.TryParse(txtNgayTruc.Text.Trim(), out int ngayTruc) || ngayTruc < 0)
-                {
-                    throw new Exception("Lỗi: Số ngày trực phải là số nguyên dương (hoặc bằng 0)!");
-                }
-
-                // [YÊU CẦU 3]: Kiểm tra định dạng số thực lớn hơn 0 cho Bậc lương
-                if (!double.TryParse(txtBacLuong.Text.Trim(), out double bacLuong) || bacLuong <= 0)
-                {
-                    throw new Exception("Lỗi: Bậc lương phải là số thực lớn hơn 0!");
-                }
-
-                // Bẫy lỗi logic nâng cao: Trùng mã bác sĩ
-                if (danhSachBacSi.Any(bs => bs.MaBS.Equals(txtMa.Text.Trim(), StringComparison.OrdinalIgnoreCase)))
-                {
-                    throw new Exception("Lỗi: Mã bác sĩ này đã tồn tại trên bảng!");
-                }
-
-                // Tiến hành tạo đối tượng và thêm vào danh sách
-                BacSi bsMoi = new BacSi()
-                {
-                    MaBS = txtMa.Text.Trim(),
-                    HoTen = txtHoTen.Text.Trim(),
-                    SoNgayTruc = ngayTruc,
-                    BacLuong = bacLuong,
-                    Khoa = cboKhoa.Text
-                };
-
-                danhSachBacSi.Add(bsMoi);
-
-                // Cập nhật hiển thị DataGrid
-                dgBacSi.ItemsSource = null;
-                dgBacSi.ItemsSource = danhSachBacSi;
-
-                // Xóa form nhập liệu
-                txtMa.Clear(); txtHoTen.Clear(); txtNgayTruc.Clear(); txtBacLuong.Clear();
-                cboKhoa.SelectedIndex = 0;
-                txtMa.Focus();
+                Quat temp = d[i];
+                d[i] = d[j];
+                d[j] = temp;
             }
-            catch (Exception ex)
-            {
-                // Hiển thị thông báo lỗi trực quan dạng MessageBox
-                MessageBox.Show(ex.Message, "Cảnh báo lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-        }
-
-        // Câu 2b: Lọc dữ liệu ngày trực < 15 và mở cửa sổ mới
-        private void btnLoc_Click(object sender, RoutedEventArgs e)
-        {
-            // Dùng LINQ lọc dữ liệu theo yêu cầu đề bài
-            List<BacSi> dsLoc = danhSachBacSi.Where(bs => bs.SoNgayTruc < 15).ToList();
-
-            if (dsLoc.Count == 0)
-            {
-                MessageBox.Show("Không có bác sĩ nào có số ngày trực < 15 để hiển thị!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            // Tạo và truyền danh sách lọc vào Constructor của ReportWindow
-            ReportWindow cuaSoBaoCao = new ReportWindow(dsLoc);
-            cuaSoBaoCao.Owner = this;
-            cuaSoBaoCao.ShowDialog(); // Mở cửa sổ dạng hộp thoại cố định
         }
     }
+}
+
+// ================= THAM LAM =================
+
+int BanQuat(Quat d[], int n, int p, Quat ketQua[])
+{
+    int soQuat = 0;
+    int tongTien = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+        // Chỉ lấy quạt nếu tổng tiền không vượt quá p
+        if (tongTien + d[i].gia <= p)
+        {
+            ketQua[soQuat] = d[i];
+
+            tongTien += d[i].gia;
+            soQuat++;
+        }
+    }
+
+    return soQuat;
+}
+
+// ================= MAIN =================
+
+int main()
+{
+    Quat d[20];
+    Quat ketQua[20];
+
+    int n;
+    int p;
+
+    // Khởi tạo dữ liệu
+    KhoiTao(d, n, p);
+
+    // Sắp xếp theo chiến lược tham lam
+    SapXep(d, n);
+
+    // Thực hiện tham lam
+    int soQuat = BanQuat(d, n, p, ketQua);
+
+    // In kết quả
+    cout << "===== DANH SACH QUAT =====" << endl;
+
+    for (int i = 0; i < soQuat; i++)
+    {
+        cout << ketQua[i].ten
+             << " - "
+             << ketQua[i].mau
+             << " - "
+             << ketQua[i].gia
+             << endl;
+    }
+
+    // Tính tổng tiền
+    int tongTien = 0;
+
+    for (int i = 0; i < soQuat; i++)
+    {
+        tongTien += ketQua[i].gia;
+    }
+
+    cout << endl;
+    cout << "So quat da ban: " << soQuat << endl;
+    cout << "Tong tien: " << tongTien << endl;
+    cout << "Gioi han: " << p << endl;
+
+    return 0;
 }
