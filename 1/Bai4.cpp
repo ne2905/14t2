@@ -1,17 +1,24 @@
-using System.Collections.Generic;
-using System.Windows;
+void sapXepTang() {
+    for (int i = 0; i < n - 1; i++) {
+        int min = i;
 
-namespace WpfApp_QuanLyBacSi
-{
-    public partial class ReportWindow : Window
-    {
-        // Hàm khởi tạo nhận danh sách đã lọc từ MainWindow truyền sang
-        public ReportWindow(List<BacSi> danhSachNhanVao)
-        {
-            InitializeComponent();
-
-            // Gán nguồn dữ liệu trực tiếp vào bảng của cửa sổ mới này
-            dgBaoCao.ItemsSource = danhSachNhanVao;
+        for (int j = i + 1; j < n; j++) {
+            if (m[j] < m[min])
+                min = j;
         }
+
+        int t;
+
+        t = m[i];
+        m[i] = m[min];
+        m[min] = t;
+
+        t = v[i];
+        v[i] = v[min];
+        v[min] = t;
+
+        t = stt[i];
+        stt[i] = stt[min];
+        stt[min] = t;
     }
 }
