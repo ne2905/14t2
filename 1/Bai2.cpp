@@ -1,29 +1,45 @@
-#include <iostream>
-using namespace std;
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="banggiaxe.xslt"?>
+<banggiaxe xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="banggiaxe.xsd">
+    
+    <hangxe ten="Toyota">
+        <dongxe ten="Vios 2021">
+            <phienban>E MT</phienban>
+            <dongco>2NR-FE</dongco>
+            <gia>506</gia>
+        </dongxe>
+        <dongxe ten="Camry 2022">
+            <phienban>2.0G</phienban>
+            <dongco>6AR-FSE, 2.0l</dongco>
+            <gia>1070</gia>
+        </dongxe>
+    </hangxe>
 
-int tongLe(int a[], int n) {
-    if (n == 0)
-        return 0;
+    <hangxe ten="Honda">
+        <dongxe ten="City 2021">
+            <phienban>G</phienban>
+            <dongco>1.5 i-VTEC</dongco>
+            <gia>529</gia>
+        </dongxe>
+        <dongxe ten="Accord 2021">
+            <phienban>VTEC Turbo</phienban>
+            <dongco>1.5 VTEC Turbo</dongco>
+            <gia>1319</gia>
+        </dongxe>
+    </hangxe>
 
-    if (a[n - 1] % 2 != 0)
-        return a[n - 1] + tongLe(a, n - 1);
+    <hangxe ten="BMW">
+        <dongxe ten="X4 2021">
+            <phienban>xDrive20i M Spor</phienban>
+            <dongco>B48, Xăng, I4, 2.0</dongco>
+            <gia>3079</gia>
+        </dongxe>
+        <dongxe ten="Series 3 2021">
+            <phienban>320i Sport Line</phienban>
+            <dongco>Xăng I4, 2.0</dongco>
+            <gia>1899</gia>
+        </dongxe>
+    </hangxe>
 
-    return tongLe(a, n - 1);
-}
-
-int main() {
-    int n, a[100];
-
-    cout << "Nhap n (>=10): ";
-    cin >> n;
-
-    cout << "Nhap cac phan tu cua mang:\n";
-    for (int i = 0; i < n; i++) {
-        cout << "a[" << i << "] = ";
-        cin >> a[i];
-    }
-
-    cout << "Tong cac so le = " << tongLe(a, n);
-
-    return 0;
-}
+</banggiaxe>
