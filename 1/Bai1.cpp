@@ -1,29 +1,54 @@
-#include <iostream>
-using namespace std;
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-float tongMang(float a[], int l, int r) {
-    if (l == r)
-        return a[l];
+    <!-- Ràng buộc hãng xe: Toyota, Honda, BMW -->
+    <xs:simpleType name="tenHangType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Toyota"/>
+            <xs:enumeration value="Honda"/>
+            <xs:enumeration value="BMW"/>
+        </xs:restriction>
+    </xs:simpleType>
 
-    int mid = (l + r) / 2;
+    <!-- Ràng buộc tên dòng xe: 4 ký tự cuối phải là chữ số -->
+    <xs:simpleType name="tenDongType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value=".*[0-9]{4}"/>
+        </xs:restriction>
+    </xs:simpleType>
 
-    return tongMang(a, l, mid) + tongMang(a, mid + 1, r);
-}
+    <!-- Ràng buộc giá: lớn hơn 0 -->
+    <xs:simpleType name="giaType">
+        <xs:restriction base="xs:decimal">
+            <xs:minExclusive value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
 
-int main() {
-    int n;
-    float a[100];
+    <!-- Cấu trúc dòng xe -->
+    <xs:complexType name="dongXeType">
+        <xs:sequence>
+            <xs:element name="phienban" type="xs:string"/>
+            <xs:element name="dongco" type="xs:string"/>
+            <xs:element name="gia" type="giaType"/>
+        </xs:sequence>
+        <xs:attribute name="ten" type="tenDongType" use="required"/>
+    </xs:complexType>
 
-    cout << "Nhap n (>=10): ";
-    cin >> n;
+    <!-- Cấu trúc hãng xe: tối đa 10 dòng xe -->
+    <xs:complexType name="hangXeType">
+        <xs:sequence>
+            <xs:element name="dongxe" type="dongXeType" maxOccurs="10"/>
+        </xs:sequence>
+        <xs:attribute name="ten" type="tenHangType" use="required"/>
+    </xs:complexType>
 
-    cout << "Nhap cac phan tu cua mang:\n";
-    for (int i = 0; i < n; i++) {
-        cout << "a[" << i << "] = ";
-        cin >> a[i];
-    }
+    <!-- Cấu trúc thẻ gốc banggiaxe: tối đa 5 hãng xe -->
+    <xs:element name="banggiaxe">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="hangxe" type="hangXeType" maxOccurs="5"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 
-    cout << "Tong cac phan tu = " << tongMang(a, 0, n - 1);
-
-    return 0;
-}
+</xs:schema>
